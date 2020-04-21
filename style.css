@@ -2,19 +2,91 @@ body {
     margin: 0;
     padding: 0;
     display: flex;
+    font-family: 'Lato', sans-serif;
 }
 
 div {
     margin: 0;
 }
 
+h2 {
+    font-family: 'Patua One', 'Times New Roman';
+}
+
 #sidebar {
     padding: 10px;
     min-width: 250px;
+    height: 100vh;
     border-right: 3px solid #000000;
     box-sizing: border-box;
+    text-align: center;
+    background-color: #E6E8E6;
 }
 
 #main {
     flex: 1;
+}
+
+#map {
+    width: 100%;
+    height: 100vh;
+}
+
+#menu {
+    margin: 70px 5% 0 5%;
+    padding: 0;
+    list-style-type: none;
+}
+
+#menu li {
+    padding: 5px 0;
+    border-bottom: 2px solid #000000;
+    font-size: 18px;
+}
+
+#menu li:hover {
+    transition: background-color 0.3s ease-out;
+    background-color: #CED0CE;
+    text-decoration: none;
+}
+
+#menu li.active {
+    color: #F15025;
+}
+
+#menu a {
+    display: block;
+    margin: 10px 0;
+}
+
+#mainSearch {
+    width: 90%;
+    height: 30px;
+    margin: 0;
+    padding: 0 0 0 15px;
+    border-radius: 500px;
+    border: 2px solid #F15025;
+    position: relative;
+}
+
+.searchWrapper img {
+    width: 25px;
+    height: 25px;
+    position: absolute;
+    left: 93%;
+    z-index: 5;
+    padding: 2.5px 5px;
+    border-left: 2px solid black;
+}
+
+.searchWrapper {
+    padding: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 40px;
+    z-index: 100;
+    position: absolute;
+    top: 0;
+    width: calc(100% - 250px);
 }

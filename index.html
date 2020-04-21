@@ -4,13 +4,46 @@
   <meta charset="UTF-8">
   <title>Public Art at Brown</title>
   <link rel="stylesheet" type="text/css" href="style.css">
+  <link href="https://fonts.googleapis.com/css2?family=Patua+One&family=Lato&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="sidebar">
-    <h2>Public Art @ Brown</h2>
+    <h2>Public Art <br />@<br /> Brown</h2>
+    <ul id="menu">
+      <li class="active"><a>Map</a></li>
+      <li><a>List</a></li>
+      <li><a>About</a></li>
+      <li><a>Admin</a></li>
+    </ul>
   </div>
   <div id="main">
+    <div id="map">
+    </div>
+    <div class="searchWrapper">
+      <img src="images/search.png" />
+      <input id="mainSearch" type="text" placeholder="Search names, artists, addresses...">
+    </div>
     <p>The searchbar, filter box, and map will go here!</p>
+    <p>I know the design is horrible, I'm trying my best to make it look more professional!</p>
+    <p>To do:</p>
+    <ol>
+      <li>Change font for title so it looks better</li>
+      <li>Add filter bar</li>
+      <li>Start adding maps api. Secure your API key!</li>
+      <li>Change search icon color. Also make it actually stay in its place when resizing. Also reposition it to fit snugly between Google's built-in map controls</li>
+      <li>Add media queries!!</li>
+    </ol>
   </div>
+  <script>
+    function initMap() {
+      var providence = {lat: 41.826, lng: -71.404};
+      var map = new google.maps.Map(
+          document.getElementById('map'), {zoom: 16, center: providence});
+      var marker = new google.maps.Marker({position: providence, map: map});
+    }
+        </script>
+  <script async defer
+  src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCZGW91AQxQ1YwcHpm44mkSBFNr6xoj4NU&callback=initMap">
+  </script>
 </body>
 </html>
