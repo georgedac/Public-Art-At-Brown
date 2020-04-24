@@ -12,16 +12,22 @@ div {
 
 h1 {
     font-family: 'Lato', 'Times New Roman';
+    font-size: 32px;
 }
 
 #sidebar {
     padding: 10px;
     min-width: 250px;
-    height: 100vh;
+    min-height: 100vh;
     border-right: 3px solid #ED1C24;
     box-sizing: border-box;
     text-align: center;
     background-color: #CED0CE;
+}
+
+#sidebar a:not(.active) {
+    text-decoration: none;
+    color: #000000;
 }
 
 #main {
@@ -91,6 +97,8 @@ h1 {
     top: 0;
 }
 
+/*These are for the carousel*/
+
 #carousel{
     background-color: gray;
 }
@@ -114,4 +122,59 @@ h1 {
     display:flex;
     flex-direction: column;
     align-items: center;
+}
+
+/*These next classes are specific to the grid view*/
+.listView {
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
+    justify-content: space-evenly;
+    margin-top: 70px;
+    grid-gap: 10px;
+    padding: 0 20px;
+}
+
+.listItem {
+    border: 3px solid #000000;
+    border-radius: 4px;
+    background-color: #CED0CE;
+}
+
+.listItem img {
+    width: 100%;
+    height: 250px;
+    object-fit: cover;
+}
+
+.listItemText {
+    padding: 0 10px;
+}
+
+.filterBox {
+    border-width: 0;
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-around;
+    align-items: baseline;
+    padding: 0;
+}
+
+.filterButton {
+    border-width: 0;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+/*These next few are for the styling of the list view text boxes*/
+.author {
+    font-weight: bold;
+}
+
+.title {
+    font-style: italic;
+}
+
+.years::after {
+    content: "\A\A";
+    white-space: pre;
 }
