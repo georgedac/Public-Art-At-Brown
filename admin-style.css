@@ -74,14 +74,14 @@ h1 {
 }
 
 .searchWrapper img {
-    width: 32px;
-    height: 28px;
+    width: 38px;
+    height: 38px;
     position: absolute;
     z-index: 5;
     padding: 5px 5px;
     border: 2px solid #ED1C24;
     display: block;
-    margin-top: -42px;
+    margin-top: -38px;
 }
 
 .searchWrapper {

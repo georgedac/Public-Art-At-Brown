@@ -14,8 +14,19 @@
       <li class="active"><a href="index.html">Map</a></li>
       <li><a href="list.html">List</a></li>
       <li><a>About</a></li>
-      <li><a href="admin-index.html">Admin</a></li>
+      <li><a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Admin</a></li>
     </ul>
+    <form class="collapse" id="collapseExample">
+      <div class="form-group">
+        <label for="username">Username:</label><br>
+        <input type="text" id="username" name="username" class="form-control form-control-sm">
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label><br>
+        <input type="text" id="password" name="password" class="form-control form-control-sm">
+      </div>
+      <a class="btn btn-primary" href="admin-index.html">Submit</a>
+    </form>
   </div>
   <div id="main">
     <div id="map">

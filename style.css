@@ -13,6 +13,7 @@ div {
 h1 {
     font-family: 'Lato', 'Times New Roman';
     font-size: 32px;
+    text-align: center;
 }
 
 #sidebar {
@@ -21,7 +22,6 @@ h1 {
     min-height: 100vh;
     border-right: 3px solid #ED1C24;
     box-sizing: border-box;
-    text-align: center;
     background-color: #CED0CE;
 }
 
@@ -40,9 +40,10 @@ h1 {
 }
 
 #menu {
-    margin: 70px 5% 0 5%;
+    margin: 60px 5% 0 5%;
     padding: 0;
     list-style-type: none;
+    text-align: center;
 }
 
 #menu li {
@@ -79,14 +80,14 @@ h1 {
 }
 
 .searchWrapper img {
-    width: 32px;
-    height: 28px;
+    width: 38px;
+    height: 38px;
     position: absolute;
     z-index: 5;
     padding: 5px 5px;
     border: 2px solid #ED1C24;
     display: block;
-    margin-top: -42px;
+    margin-top: -38px;
 }
 
 .searchWrapper {
@@ -178,3 +179,4 @@ h1 {
     content: "\A\A";
     white-space: pre;
 }
+
