@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <title>Public Art at Brown</title>
   <link rel="stylesheet" type="text/css" href="style.css">
-  <link href="https://fonts.googleapis.com/css2?family=Patua+One&family=Lato&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="sidebar">
-    <h2>Public Art <br />@<br /> Brown</h2>
+    <h1>Public Art <br />@<br /> Brown</h1>
     <ul id="menu">
       <li class="active"><a>Map</a></li>
       <li><a>List</a></li>
@@ -38,7 +38,16 @@
     function initMap() {
       var providence = {lat: 41.826, lng: -71.404};
       var map = new google.maps.Map(
-          document.getElementById('map'), {zoom: 16, center: providence});
+          document.getElementById('map'), {
+            zoom: 16,
+            center: providence,
+            styles: [
+           {
+            featureType: 'poi.business',
+            stylers: [{visibility: 'off'}]
+           },
+          ]
+            });
       var marker = new google.maps.Marker({position: providence, map: map});
     }
         </script>
