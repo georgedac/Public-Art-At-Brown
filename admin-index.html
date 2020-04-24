@@ -4,17 +4,17 @@
   <meta charset="UTF-8">
   <title>Public Art at Brown</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-  <link rel="stylesheet" type="text/css" href="style.css">
+  <link rel="stylesheet" type="text/css" href="admin-style.css">
   <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
 </head>
 <body>
   <div id="sidebar">
-    <h1>Public Art <br />@<br /> Brown</h1>
+    <h1>Public Art <br />@<br /> Brown<br />(Admin)</h1>
     <ul id="menu">
-      <li class="active"><a href="index.html">Map</a></li>
+      <li><a href="index.html">Map</a></li>
       <li><a href="list.html">List</a></li>
       <li><a>About</a></li>
-      <li><a href="admin-index.html">Admin</a></li>
+      <li class="active"><a href="admin-index.html">Admin</a></li>
     </ul>
   </div>
   <div id="main">
@@ -43,20 +43,20 @@
       {
         title: "Untitled (Lamp/Bear)", 
         artist: "Urs Fischer",
-        description: `2005-06. Painted and lacquered cast bronze, 
-        acrylic glass, LED lights, stainless steel 
-        interior framework. 23' x 21'4" x 24'7". 
-        Lent from the Steven and Alexandra Cohen 
-        Collection. Installed on Simmons Quad 
-        near Ashamu Dance Studio, fall 2016`,
+        description: `2005-06. Painted and lacquered cast bronze, acrylic glass, LED lights, stainless steel` + ` 
+        interior framework. 23' x 21'4" x 24'7". Lent from the Steven and Alexandra Cohen Collection. ` + 
+        `Installed on Simmons Quad near Ashamu Dance Studio, fall 2016`,
         location: {lat: 41.8265259, lng: -71.4014886},
         files: ['https://i0.wp.com/blognonian.com/wp-content/uploads/2016/10/Blueno.jpg?w=412']
       }
       ];
     let infowindow = null;
     let markers = [];
-    function windowContent(loc) {
-      let carousel = `
+    let showingTempMarker = false;
+    let tempMarkerID = null;
+    function getCarousel(loc) {
+      if (!loc.files) loc.files=[];
+      return `
       <div id="carousel" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
           ${loc.files.map((src,idx) => 
@@ -79,6 +79,10 @@
         </a>
       </div>
       `;
+    }
+    function adminWindowContent(idx) {
+      let loc = locs[idx];
+      let carousel = getCarousel(loc);
       return `<div>
             ${carousel}
             <h1 class="title">${loc.title}</h1>
@@ -86,7 +90,44 @@
               <p class="artist">Artist: ${loc.artist}</p>
               <p class="desc">${loc.description}</p>
             </div>
+            <button type="button" onclick="adminEdit(${idx})">Edit</button>
           </div>`;
+    }
+    function adminEdit(idx) {
+      let loc = locs[idx];
+      let carousel = getCarousel(loc);
+      let content = `<div>
+            ${carousel}
+            <button type="button">Upload</button>
+            <form>
+              <label for="ftitle">Title:</label><br>
+              <input type="text" id="ftitle" name="ftitle" value=${loc.title}><br>
+              <label for="artist">Artist:</label><br>
+              <input type="text" id="artist" name="artist" value=${loc.artist}><br>
+              <label for="description">Description:</label><br>
+              <textarea name="textarea" style="width:562px;height:100px;">${loc.description}</textarea><br>
+              <button type="button">Cancel</button>
+              <button type="button">Delete</button>
+              <button type="button">Save</button>
+            </form>
+          </div>`;
+      infowindow.setContent(content);
+      infowindow.open(map, markers[idx]);
+    }
+    function adminCreate(idx) {
+      showingTempMarker= false;
+      locs[idx] = {title: "", artist: "", description: "", files: []};
+      adminEdit(idx);
+    }
+    function placeMarker(location, map) {
+          let marker = new google.maps.Marker({
+              position: location, 
+              map: map
+          });
+          markers.push(marker);
+    }
+    function removeMarker(idx) {
+      markers[idx].setMap(null); // maybe should actually remove but yay indexing
     }
     function initMap() {
       var providence = {lat: 41.826, lng: -71.404};
@@ -103,14 +144,40 @@
             });
       infowindow = new google.maps.InfoWindow();
       var marker = new google.maps.Marker({position: providence, map: map});
-      markers = locs.map(loc => {
+      markers = locs.map((loc,idx) => {
         let marker = new google.maps.Marker({position: loc.location, map: map});
         marker.addListener('click', function() {
-          infowindow.setContent(windowContent(loc));
+          infowindow.setContent(adminWindowContent(idx));
           infowindow.open(map, marker); // make sure this works lol
         });
         return marker;
       })
+      google.maps.event.addListener(map, 'click', function(event) {
+        if(showingTempMarker){
+          removeMarker(tempMarkerID);
+        }
+        idx = markers.length;
+        placeMarker(event.latLng, map);
+        showingTempMarker = true;
+        tempMarkerID = idx;
+        let content = `
+      <button type="button" onclick="removeMarker(${idx})">Remove</button>
+      `;
+        markers[idx].addListener('click', function() {
+          infowindow.setContent(content);
+          infowindow.open(map, this); // make sure this works lol
+        });
+        infowindow.setContent(`
+      <button type="button" onclick="adminCreate(${idx})">Add New</button>
+      `);
+        infowindow.open(map, markers[idx]);
+      });
+      setInterval(function (){
+        if(!infowindow.getMap() && showingTempMarker){
+          removeMarker(tempMarkerID);
+          showingTempMarker = false;
+        }
+      }, 1000);
     }
         </script>
   <script async defer
