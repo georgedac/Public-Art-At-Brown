@@ -11,10 +11,10 @@
   <div id="sidebar">
     <h1>Public Art <br />@<br /> Brown<br />(Admin)</h1>
     <ul id="menu">
-      <li><a href="index.html">Map</a></li>
-      <li><a href="list.html">List</a></li>
+      <li><a href="/">Map</a></li>
+      <li><a href="/list">List</a></li>
       <li><a>About</a></li>
-      <li class="active"><a href="admin-index.html">Admin</a></li>
+      <li class="active"><a href="/admin">Admin</a></li>
     </ul>
   </div>
   <div id="main">
@@ -148,7 +148,7 @@
         let marker = new google.maps.Marker({position: loc.location, map: map});
         marker.addListener('click', function() {
           infowindow.setContent(adminWindowContent(idx));
-          infowindow.open(map, marker); // make sure this works lol
+          infowindow.open(map, marker);
         });
         return marker;
       })
