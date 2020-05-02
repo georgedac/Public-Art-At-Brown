@@ -100,10 +100,107 @@
             featureType: 'poi.business',
             stylers: [{visibility: 'off'}]
            },
-          ]
-            });
+           {
+            featureType: "landscape.man_made",
+            elementType: "geometry.fill",
+            stylers: [{color: "#fdf4dd"}]
+          },
+          {
+            featureType: "landscape.man_made",
+            elementType: "geometry.stroke",
+            stylers: [{color: "#b8bdc8"},
+              {visibility: "on"},
+              {weight: 0.5}]
+          },
+          {
+            featureType: "poi.business",
+            stylers: [{visibility: "off"}]
+          },
+          {
+            featureType: "poi.park",
+            elementType: "geometry.fill",
+            stylers: [{color: "#e4ecd9"}]
+          },
+          {
+            featureType: "poi.park",
+            elementType: "labels.text",
+            stylers: [{visibility: "off"}]
+          },
+          {
+            featureType: "poi.school",
+            elementType: "geometry.fill",
+            stylers: [{color: "#e4ecd9"}]
+          },
+          {
+            featureType: "poi.sports_complex",
+            elementType: "geometry.fill",
+            stylers: [{color: "#e4ecd9"}]
+          },
+          {
+            featureType: "road",
+            elementType: "geometry.fill",
+            stylers: [{color: "#fdf4dd"}]
+          },
+          {
+            featureType: "road",
+            elementType: "geometry.stroke",
+            stylers: [{color: "#b8bdc8"}]
+          },
+          {
+            featureType: "road",
+            elementType: "labels.icon",
+            stylers: [{visibility: "off"}]
+          },
+          {
+            featureType: "road.local",
+            elementType: "geometry.stroke",
+            stylers: [{weight: 0.5}]
+          },
+          {
+            elementType: "labels.text.stroke",
+            stylers: [{visibility: "off"}]
+            }
+        ]
+      });
       infowindow = new google.maps.InfoWindow();
-      var marker = new google.maps.Marker({position: providence, map: map});
+
+
+      // Set up current location marker
+      let currentloc = new google.maps.Marker({
+        clickable: false,
+        icon: 'https://i.stack.imgur.com/VpVF8.png',
+        shadow: null,
+        zIndex: 999,
+        animation: google.maps.Animation.DROP,
+        map: map
+      });
+
+      // Request user's location
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(function(position) {
+          var pos = {
+            lat: position.coords.latitude,
+            lng: position.coords.longitude
+          };
+
+          currentloc.setPosition(pos);
+          map.setCenter(pos);
+        }, function() {
+          handleLocationError(true, infowindow, map.getCenter());
+        });
+      } else {
+        // Browser doesn't support Geolocation
+        handleLocationError(false, infowindow, map.getCenter());
+      }
+
+      function handleLocationError(browserHasGeolocation, infowindow, pos) {
+      infowindow.setPosition(pos);
+      infowindow.setContent(browserHasGeolocation ?
+                      'Error: The Geolocation service failed.' :
+                      'Error: Your browser doesn\'t support geolocation.');
+      infowindow.open(map);
+      }
+
       markers = locs.map(loc => {
         let marker = new google.maps.Marker({position: loc.location, map: map});
         marker.addListener('click', function() {

@@ -1,3 +1,11 @@
+/*COLOR GUIDE
+#98A4AE  Grey
+#C6CDD2  Grey with 55% tint (lighter)
+#4E3629  Brown
+#ED1C24  Red
+#FFC72C  Gold
+*/
+
 body {
     margin: 0;
     padding: 0;
@@ -14,15 +22,15 @@ h1 {
     font-family: 'Lato', 'Times New Roman';
     font-size: 32px;
     text-align: center;
+    padding: 10px;
 }
 
 #sidebar {
     padding: 10px;
     min-width: 250px;
     min-height: 100vh;
-    border-right: 3px solid #ED1C24;
     box-sizing: border-box;
-    background-color: #CED0CE;
+    background-color: #98A4AE;
 }
 
 #sidebar a:not(.active) {
@@ -53,13 +61,13 @@ h1 {
 
 #menu li:hover {
     transition: background-color 0.3s ease-out;
-    background-color:#AAABBB;
+    background-color:#C6CDD2;
     text-decoration: none;
 }
 
 #menu li.active {
     color: #ED1C24;
-    background-color: #AAABBB;
+    background-color: #C6CDD2;
 }
 
 #menu a {
@@ -101,7 +109,7 @@ h1 {
 /*These are for the carousel*/
 
 #carousel{
-    background-color: #CED0CE;
+    background-color: #98A4AE;
 }
 
 .carousel-inner {
@@ -138,7 +146,7 @@ h1 {
 .listItem {
     border: 3px solid #000000;
     border-radius: 4px;
-    background-color: #CED0CE;
+    background-color: #98A4AE;
 }
 
 .listItem img {
