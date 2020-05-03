@@ -89,6 +89,24 @@
             </div>
           </div>`;
     }
+
+    function getLocs(map) {
+      fetch('/landmarks')
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          locs = data;
+          markers = locs.map(loc => {
+            let marker = new google.maps.Marker({position: loc.location, map: map});
+            marker.addListener('click', function() {
+              infowindow.setContent(windowContent(loc));
+              infowindow.open(map, marker);
+            });
+            return marker;
+          })
+        });
+    }
+
     function initMap() {
       var providence = {lat: 41.826, lng: -71.404};
       var map = new google.maps.Map(
@@ -209,6 +227,7 @@
         });
         return marker;
       })
+      getLocs(map);
     }
         </script>
   <script async defer

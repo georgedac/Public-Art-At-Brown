@@ -23,6 +23,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 app.get('/landmarks', dbHandler.getLandmarks);
 app.post('/landmarks', dbHandler.createLandmark);
 app.post('/landmarks/:id', dbHandler.editLandmark);
+app.delete('/landmarks/:id', dbHandler.deleteLandmark);
 
 // Create controller handlers to handle requests at each endpoint
 app.get('/list', function(req, res) {

@@ -42,7 +42,7 @@
     let locs = [
       {
         title: "Untitled (Lamp/Bear)", 
-        artist: "Urs Fischer",
+        artists: "Urs Fischer",
         description: `2005-06. Painted and lacquered cast bronze, acrylic glass, LED lights, stainless steel` + ` 
         interior framework. 23' x 21'4" x 24'7". Lent from the Steven and Alexandra Cohen Collection. ` + 
         `Installed on Simmons Quad near Ashamu Dance Studio, fall 2016`,
@@ -54,6 +54,13 @@
     let markers = [];
     let showingTempMarker = false;
     let tempMarkerID = null;
+    let map = null;
+
+    function replaceNewline(input) {
+      input = String(input);
+      return input.replace(/(\r\n|\n|\r)/gm, '<br/>'); // String.fromCharCode(13, 10)
+    }
+
     function getCarousel(loc) {
       if (!loc.files) loc.files=[];
       return `
@@ -80,58 +87,204 @@
       </div>
       `;
     }
-    function adminWindowContent(idx) {
+
+    function locationWindow(idx) {
       let loc = locs[idx];
       let carousel = getCarousel(loc);
       return `<div>
             ${carousel}
             <h1 class="title">${loc.title}</h1>
             <div>
-              <p class="artist">Artist: ${loc.artist}</p>
-              <p class="desc">${loc.description}</p>
+              <p class="artist">Artist(s): ${loc.artists}</p>
+              <p class="desc">${replaceNewline(loc.description)}</p>
             </div>
-            <button type="button" onclick="adminEdit(${idx})">Edit</button>
+            <button type="button" onclick="editWindow(${idx})">Edit</button>
           </div>`;
     }
-    function adminEdit(idx) {
+
+    function editWindow(idx) {
       let loc = locs[idx];
       let carousel = getCarousel(loc);
       let content = `<div>
             ${carousel}
             <button type="button">Upload</button>
-            <form>
-              <label for="ftitle">Title:</label><br>
-              <input type="text" id="ftitle" name="ftitle" value=${loc.title}><br>
-              <label for="artist">Artist:</label><br>
-              <input type="text" id="artist" name="artist" value=${loc.artist}><br>
-              <label for="description">Description:</label><br>
-              <textarea name="textarea" style="width:562px;height:100px;">${loc.description}</textarea><br>
+            <form method="POST" action="/landmarks/${loc.id} id="editForm">
+              <label for="formTitle">Title:</label><br>
+              <input type="text" id="formTitle" name="formTitle" value="${loc.title}"><br>
+              <label for="formArtist">Artist(s):</label><br>
+              <input type="text" id="formArtist" name="formArtist" value="${loc.artists}"><br>
+              <label for="formDescription">Description:</label><br>
+              <textarea name="formDescription" id="formDescription" style="width:562px;height:100px;">${loc.description}</textarea><br>
               <button type="button">Cancel</button>
-              <button type="button">Delete</button>
-              <button type="button">Save</button>
+              <button type="button" onclick="onDelete(${idx})">Delete</button>
+              <button type="button" onclick="onEdit(${idx})">Save</button>
             </form>
           </div>`;
       infowindow.setContent(content);
       infowindow.open(map, markers[idx]);
     }
-    function adminCreate(idx) {
+
+    function onDelete(idx) {
+      let r = confirm("Are you sure you want to delete this landmark? The action can't be undone.");
+      if(!r){
+        return;
+      }
+      let loc = locs[idx];
+      removeMarker(idx);
+      console.log("requesting to delete: " + loc.id);
+      fetch(`/landmarks/${loc.id}`, {
+        method: 'DELETE'
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log("got something back from delete!");}) // check if good response I guess?
+    }
+
+    function onEdit(idx) {
+      // ftitle, artist, description
+      // TODO upload (files)
+      // TODO allow people to move markers? show current location w/ lng/lat?
+      const loc = locs[idx];
+      let message = {
+        'title': document.getElementById('formTitle').value,
+        'artists': document.getElementById('formArtist').value,
+        'description': document.getElementById('formDescription').value
+      }
+      console.log("requesting edit");
+      console.log(message);
+      locs[idx].title = message.title;
+      locs[idx].artists = message.artists;
+      locs[idx].description = message.description;
+      markers[idx].setTitle(message.title); // might need to refresh
+      fetch(`/landmarks/${loc.id}`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(message),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log("got data back from edit!");
+        })
+    }
+
+    function createWindow(idx) {
       showingTempMarker= false;
       locs[idx] = {title: "", artist: "", description: "", files: []};
-      adminEdit(idx);
+      loc = locs[idx];
+      let carousel = getCarousel(loc);
+      let content = `<div>
+            ${carousel}
+            <button type="button">Upload</button>
+            <form>
+              <label for="cFormTitle">Title:</label><br>
+              <input type="text" id="cFormTitle" name="cFormTitle" value="${loc.title}"><br>
+              <label for="cFormArtist">Artist:</label><br>
+              <input type="text" id="cFormArtist" name="cFormArtist" value="${loc.artist}"><br>
+              <label for="cFormDescription">Description:</label><br>
+              <textarea name="cFormDescription" id="cFormDescription" style="width:562px;height:100px;">${loc.description}</textarea><br>
+              <button type="button" onclick="removeMarker(${idx})">Cancel</button>
+              <button type="button" onclick="onCreate(${idx})">Save</button>
+            </form>
+          </div>`;
+      infowindow.setContent(content);
+      infowindow.open(map, markers[idx]);
     }
-    function placeMarker(location, map) {
+
+    function onCreate(idx) {
+
+      // ftitle, artist, description
+      // TODO upload (files)
+      // location ({lat, lng})
+      console.log(document.getElementById('cFormTitle').value);
+      console.log(document.getElementById('cFormArtist').value);
+      console.log(document.getElementById('cFormDescription').value);
+      let message = {
+        'title': document.getElementById('cFormTitle').value,
+        'artists': document.getElementById('cFormArtist').value,
+        'description': document.getElementById('cFormDescription').value,
+        'location': {
+          'lat': markers[idx].getPosition().lat(),
+          'lng': markers[idx].getPosition().lng() // unclear if these are strings or what
+        },
+        'files': []
+      }
+
+      // update local storage
+      locs[idx].title = message.title;
+      locs[idx].artists = message.artists;
+      locs[idx].description = message.description;
+      locs[idx].location = message.location;
+      locs[idx].files = message.files;
+
+      // create non-temporary marker to handle click events
+      let marker = new google.maps.Marker({
+        position: markers[idx].getPosition(), 
+        title: message.title, 
+        map: map
+      });
+      marker.addListener('click', function() {
+        infowindow.setContent(locationWindow(idx));
+        infowindow.open(map, marker);
+      });
+      removeMarker(idx);
+      markers[idx] = marker;
+
+      console.log("requesting create");
+      console.log(message);
+      fetch(`/landmarks`, {
+        method: 'POST',
+        headers: {
+          'Accept': 'application/json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(message),
+      })
+        .then(response => response.json())
+        .then(data => {
+          console.log("got an id back from create! id:" + data.id);
+          locs[idx].id = data.id;
+        })
+    }
+
+    function placeMarker(location) {
           let marker = new google.maps.Marker({
               position: location, 
               map: map
           });
           markers.push(marker);
     }
+
     function removeMarker(idx) {
       markers[idx].setMap(null); // maybe should actually remove but yay indexing
+      console.log("removed marker");
     }
+
+    function getLocs() {
+      fetch('/landmarks')
+        .then(response => response.json())
+        .then(data => {
+          console.log(data)
+          locs = data;
+          markers = locs.map((loc,idx) => {
+            let marker = new google.maps.Marker({
+              position: loc.location, 
+              title: loc.title,
+              map: map});
+            marker.addListener('click', function() {
+              infowindow.setContent(locationWindow(idx));
+              infowindow.open(map, marker);
+            });
+            return marker;
+          })
+        });
+    }
+
     function initMap() {
       var providence = {lat: 41.826, lng: -71.404};
-      var map = new google.maps.Map(
+      map = new google.maps.Map(
           document.getElementById('map'), {
             zoom: 16,
             center: providence,
@@ -141,23 +294,22 @@
             stylers: [{visibility: 'off'}]
            },
           ]
-            });
-      infowindow = new google.maps.InfoWindow();
-      var marker = new google.maps.Marker({position: providence, map: map});
-      markers = locs.map((loc,idx) => {
-        let marker = new google.maps.Marker({position: loc.location, map: map});
-        marker.addListener('click', function() {
-          infowindow.setContent(adminWindowContent(idx));
-          infowindow.open(map, marker);
         });
-        return marker;
-      })
+      infowindow = new google.maps.InfoWindow();
+        // center the view
+      var marker = new google.maps.Marker({position: providence, map: map});
+      marker.setVisible(false);
+      
+      // load current landmarks
+      getLocs();
+      
+      // set up click to create
       google.maps.event.addListener(map, 'click', function(event) {
         if(showingTempMarker){
           removeMarker(tempMarkerID);
         }
         idx = markers.length;
-        placeMarker(event.latLng, map);
+        placeMarker(event.latLng);
         showingTempMarker = true;
         tempMarkerID = idx;
         let content = `
@@ -165,13 +317,14 @@
       `;
         markers[idx].addListener('click', function() {
           infowindow.setContent(content);
-          infowindow.open(map, this); // make sure this works lol
+          infowindow.open(map, this);
         });
         infowindow.setContent(`
-      <button type="button" onclick="adminCreate(${idx})">Add New</button>
+      <button type="button" onclick="createWindow(${idx})">Add New</button>
       `);
         infowindow.open(map, markers[idx]);
       });
+      // workaround for cleaning up old markers when clicking elsewhere
       setInterval(function (){
         if(!infowindow.getMap() && showingTempMarker){
           removeMarker(tempMarkerID);
