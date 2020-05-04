@@ -19,7 +19,7 @@ cloudinary.config({
     cloudinary: cloudinary,
     folder: "demo",
     allowedFormats: ["jpg", "png"],
-    transformation: [{ width: 500, height: 500, crop: "limit" }]
+    // transformation: [{ width: 500, height: 500, crop: "limit" }]
     });
     const parser = multer({ storage: storage });
 
@@ -40,7 +40,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/landmarks', dbHandler.getLandmarks);
 app.post('/landmarks', parser.array('files'), dbHandler.createLandmark);
-app.post('/landmarks/:id', parser.array('files'), dbHandler.editLandmark);
+app.put('/landmarks/:id', parser.array('files'), dbHandler.editLandmark);
 app.delete('/landmarks/:id', dbHandler.deleteLandmark);
 
 // Create controller handlers to handle requests at each endpoint

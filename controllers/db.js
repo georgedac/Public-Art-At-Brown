@@ -38,6 +38,7 @@ function getLandmarks(request, response) {
 function createLandmark(request, response){
     const id = genId();
     let new_lm = request.body;
+    console.log(request.files);
     new_lm.files = request.files.map(file => ({
         url: file.url,
         id: file.public_id,
@@ -49,6 +50,8 @@ function createLandmark(request, response){
     const landmark = new Landmark(new_lm);
     landmark.save(function(err, data) {
         if (err) return console.error(err);
+        console.log(data);
+        console.log("edited a thing");
     });
     // response.redirect('/' + id)
     response.json({
@@ -60,6 +63,7 @@ function createLandmark(request, response){
 function editLandmark(request, response){
     let id = request.params.id;
     let new_lm = request.body;
+    console.log(request.files);
     let new_files = request.files.map(file => ({
         url: file.url, // might need to be string?
         id: file.public_id,
@@ -73,8 +77,12 @@ function editLandmark(request, response){
     Landmark.updateOne({"id": id}, {
         $push: { files: { $each: new_files } }, // might need to be string?
         $set: new_lm,
-      }, { runValidators: true });
-    response.json({'new_files': new_lm.files}); // ....????
+      }, { runValidators: true }, function(err, data) {
+        if (err) return console.error(err);
+        console.log(data);
+        console.log("updated a thing");
+      });
+    response.json({'new_files': new_files}); // ....????
 }
 
 function deleteLandmark(request, response){

@@ -62,7 +62,8 @@
       return input.replace(/(\r\n|\n|\r)/gm, '<br/>'); // String.fromCharCode(13, 10)
     }
 
-    function getCarousel(loc) {
+    function getCarousel(idx) {
+      let loc = locs[idx];
       if (!loc.files) loc.files=[];
       return `
       <div id="carousel" class="carousel slide" data-ride="carousel">
@@ -73,12 +74,9 @@
         <div class="carousel-inner">
           ${loc.files.map((file,idx) => 
             `<div class="carousel-item ${(idx==0)?"active":""}">
-              <iframe src=${
-                (file.is360 ?
-                 `https://storage.googleapis.com/vrview/2.0/embed?image=${file.url}`: // check this vs video=
-                 file.url)
-              }>
-              </iframe>
+              ${(file.is360 ?
+                `<iframe class="size-img" src=https://storage.googleapis.com/vrview/2.0/embed?image=${file.url}></iframe>`:
+                `<img class="size-img" src="${file.url}">`)}
             </div>`
             )}
         </div>
@@ -96,7 +94,7 @@
 
     function locationWindow(idx) {
       let loc = locs[idx];
-      let carousel = getCarousel(loc);
+      let carousel = getCarousel(idx);
       let content = `<div>
             ${carousel}
             <h1 class="title">${loc.title}</h1>
@@ -112,11 +110,11 @@
 
     function editWindow(idx) {
       let loc = locs[idx];
-      let carousel = getCarousel(loc);
+      let carousel = getCarousel(idx);
       let content = `<div>
             ${carousel}
             <form id="editForm">
-              <label for="formFiles">Upload (hold CTRL or SHIFT to select multiple):</label>
+              <label for="formFiles">Upload (hold CTRL or SHIFT to select multiple):</label><br>
               <input type="file" id="formFiles" name="files" multiple><br><br>
               <label for="formTitle">Title:</label><br>
               <input type="text" id="formTitle" name="title" value="${loc.title}"><br>
@@ -137,12 +135,12 @@
       showingTempMarker= false;
       locs[idx] = {title: "", artist: "", description: "", files: []};
       loc = locs[idx];
-      let carousel = getCarousel(loc);
+      let carousel = getCarousel(idx);
       let content = `<div>
             ${carousel}
             <button type="button">Upload</button>
             <form id="createForm">
-              <label for="cFormFiles">Upload (hold CTRL or SHIFT to select multiple):</label>
+              <label for="cFormFiles">Upload (hold CTRL or SHIFT to select multiple):</label><br>
               <input type="file" id="cFormFiles" name="files" multiple><br><br>
               <label for="cFormTitle">Title:</label><br>
               <input type="text" id="cFormTitle" name="title" value="${loc.title}"><br>
@@ -199,7 +197,8 @@
         .then(data => {
           console.log("got data back from edit!");
           // update with new_files
-          loc[idx].files.push(...data['new_files']);
+          console.log(data['new_files']);
+          Array.prototype.push.apply(locs[idx].files, data['new_files']);
           // TODO force refresh??
         })
       locationWindow(idx);
@@ -251,7 +250,9 @@
         .then(data => {
           console.log("got an id back from create! id:" + data.id);
           locs[idx].id = data.id;
-          loc[idx].files.push(...data['new_files']);
+          // locs[idx].files.push(...data['new_files']);
+          console.log(data['new_files']);
+          Array.prototype.push.apply(locs[idx].files, data['new_files']);
           // TODO force refresh??
         })
     }
