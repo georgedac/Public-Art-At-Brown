@@ -68,7 +68,7 @@ function windowContent(idx, expand=false) {
     </a>
   </div>
   `;
-  return `<div class="infowindow">
+  return `<div class="infowindow ${expand?"mobile-pad":""}">
         <div class="hide-mobile">${carousel}</div>
         ${(loc.files.length > 0)?(expand ? carousel: `<img class="w-100 show-mobile" src=${loc.files[0].url}>`):""}
         <h1 class="title">${loc.title}</h1>
@@ -83,13 +83,13 @@ function windowContent(idx, expand=false) {
 
 function mobileExpand(idx){
   let content = `
-  <button type="button" class="btn btn-secondary" onclick=mobileClose()>Close</button>
+  <button type="button" id="mobile-close" class="btn btn-secondary fix-top" onclick=mobileClose()>X</button>
   ${windowContent(idx, true)}
   `;
   document.getElementById('infowindow').innerHTML = content;
   document.getElementById('infowindow').style.background = "white";
   document.getElementById('infowindow').style.opacity = "1";
-  document.getElementById('infowindow').style.top = "0";
+  document.getElementById('infowindow').style.height = "100%";
 }
 
 function mobileClose(){
@@ -97,7 +97,7 @@ function mobileClose(){
   document.getElementById('infowindow').innerHTML = "";
   document.getElementById('infowindow').style.background = "transparent";
   document.getElementById('infowindow').style.opacity = "0";
-  document.getElementById('infowindow').style.top = "100%";
+  document.getElementById('infowindow').style.height = "0";
 }
 
 function haversine_distance(mk1, pos) {
