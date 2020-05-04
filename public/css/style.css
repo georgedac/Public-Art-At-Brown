@@ -230,9 +230,19 @@ h1 {
         left: 90%;
     }
 
+    #brand {
+        align-self: center;
+        font-weight: bold;
+        font-family: 'Lato', sans-serif;
+    }
+
     #main{
         display: flex;
         flex-direction: column;
+    }
+
+    .listView {
+        margin-top: 10px;
     }
     
     #infowindow {
