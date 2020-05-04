@@ -40,6 +40,8 @@
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <script>
+    // initialize global variables
+    let map = null;
     let locs = [
       {
         title: "Untitled (Lamp/Bear)", 
@@ -56,7 +58,13 @@
       ];
     let infowindow = null;
     let markers = [];
-    function windowContent(loc) {
+    // end global variables
+    
+    function replaceNewline(input) {
+      return input.replace(/(\r\n|\n|\r)/gm, '<br/>'); // String.fromCharCode(13, 10)
+    }
+    function windowContent(idx) {
+      let loc = locs[idx];
       let carousel = `
       <div id="carousel" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
@@ -84,22 +92,37 @@
             ${carousel}
             <h1 class="title">${loc.title}</h1>
             <div>
-              <p class="artist">Artist: ${loc.artist}</p>
-              <p class="desc">${loc.description}</p>
+              <p class="artist">Artist: ${loc.artists}</p>
+              <p class="desc">${replaceNewline(loc.description)}</p>
             </div>
           </div>`;
     }
 
-    function getLocs(map) {
+    function haversine_distance(mk1, pos) {
+      // https://cloud.google.com/blog/products/maps-platform/how-calculate-distances-map-maps-javascript-api
+      var R = 3958.8; // Radius of the Earth in miles
+      var rlat1 = mk1.position.lat() * (Math.PI/180); // Convert degrees to radians
+      var rlat2 = pos.lat * (Math.PI/180); // Convert degrees to radians
+      var difflat = rlat2-rlat1; // Radian difference (latitudes)
+      var difflon = (pos.lng-mk1.position.lng()) * (Math.PI/180); // Radian difference (longitudes)
+
+      var d = 2 * R * Math.asin(Math.sqrt(Math.sin(difflat/2)*Math.sin(difflat/2)+Math.cos(rlat1)*Math.cos(rlat2)*Math.sin(difflon/2)*Math.sin(difflon/2)));
+      return d;
+    }
+
+    function initializeLandmarks() {
       fetch('/landmarks')
         .then(response => response.json())
         .then(data => {
           console.log(data)
           locs = data;
-          markers = locs.map(loc => {
-            let marker = new google.maps.Marker({position: loc.location, map: map});
+          markers = locs.map((loc,idx) => {
+            let marker = new google.maps.Marker({
+              position: loc.location, 
+              title: loc.title,
+              map: map});
             marker.addListener('click', function() {
-              infowindow.setContent(windowContent(loc));
+              infowindow.setContent(windowContent(idx));
               infowindow.open(map, marker);
             });
             return marker;
@@ -109,7 +132,7 @@
 
     function initMap() {
       var providence = {lat: 41.826, lng: -71.404};
-      var map = new google.maps.Map(
+      map = new google.maps.Map(
           document.getElementById('map'), {
             zoom: 16,
             center: providence,
@@ -183,7 +206,7 @@
       infowindow = new google.maps.InfoWindow();
 
 
-      // Set up current location marker
+      // Default center on campus
       let currentloc = new google.maps.Marker({
         clickable: false,
         icon: 'https://i.stack.imgur.com/VpVF8.png',
@@ -192,17 +215,20 @@
         animation: google.maps.Animation.DROP,
         map: map
       });
+      currentloc.setVisible(false);
 
-      // Request user's location
+      // If user's location is close to campus, center on that
       if (navigator.geolocation) {
         navigator.geolocation.getCurrentPosition(function(position) {
-          var pos = {
+          const pos = {
             lat: position.coords.latitude,
             lng: position.coords.longitude
           };
-
-          currentloc.setPosition(pos);
-          map.setCenter(pos);
+          if (haversine_distance(currentloc, pos) < 0.6) {
+          // less than 0.6mi away from campus: center at their location
+            currentloc.setPosition(pos);
+            map.setCenter(pos);
+          }
         }, function() {
           handleLocationError(true, infowindow, map.getCenter());
         });
@@ -212,22 +238,15 @@
       }
 
       function handleLocationError(browserHasGeolocation, infowindow, pos) {
-      infowindow.setPosition(pos);
-      infowindow.setContent(browserHasGeolocation ?
-                      'Error: The Geolocation service failed.' :
-                      'Error: Your browser doesn\'t support geolocation.');
-      infowindow.open(map);
+      // infowindow.setPosition(pos);
+      // infowindow.setContent(browserHasGeolocation ?
+      //                 'Error: The Geolocation service failed.' :
+      //                 'Error: Your browser doesn\'t support geolocation.');
+      // infowindow.open(map);
       }
 
-      markers = locs.map(loc => {
-        let marker = new google.maps.Marker({position: loc.location, map: map});
-        marker.addListener('click', function() {
-          infowindow.setContent(windowContent(loc));
-          infowindow.open(map, marker);
-        });
-        return marker;
-      })
-      getLocs(map);
+      // put markers on map
+      initializeLandmarks();
     }
         </script>
   <script async defer
