@@ -1,3 +1,4 @@
+// from the body-scroll-lock npm package
 (function (global, factory) {
   if (typeof define === "function" && define.amd) {
     define(['exports'], factory);
