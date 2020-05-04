@@ -31,6 +31,9 @@ h1 {
     min-height: 100vh;
     box-sizing: border-box;
     background-color: #98A4AE;
+    box-shadow: 3px 0 12px #C6CDD2;
+    position: relative;
+    z-index: 1;
 }
 
 #sidebar a:not(.active) {
