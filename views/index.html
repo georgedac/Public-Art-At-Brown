@@ -68,13 +68,18 @@
       let carousel = `
       <div id="carousel" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
-          ${loc.files.map((src,idx) => 
+          ${loc.files.map((file,idx) => 
           `<li data-target="#carousel" data-slide-to="${idx}" ${(idx==0)?"class='active'":""}></li>`)}
         </ol>
         <div class="carousel-inner">
-          ${loc.files.map((src,idx) => 
+          ${loc.files.map((file,idx) => 
             `<div class="carousel-item ${(idx==0)?"active":""}">
-              <img class="size-img" src=${src}>
+              <iframe src=${
+                (file.is360 ?
+                 `https://storage.googleapis.com/vrview/2.0/embed?image=${file.url}`: // check this vs video=
+                 file.url)
+              }>
+              </iframe>
             </div>`
             )}
         </div>

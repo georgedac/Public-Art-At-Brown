@@ -25,9 +25,24 @@ function getLandmarks(request, response) {
     });
 }
 
+// app.post('/api/images', parser.array('files'), (req, res) => {
+//     console.log(req.file) // to see what is returned to you
+//     const image = {};
+//     image.url = req.files.url;
+//     image.id = req.files.public_id;
+//     Image.create(image) // save image information in database
+//       .then(newImage => res.json(newImage))
+//       .catch(err => console.log(err));
+//   });
+
 function createLandmark(request, response){
     const id = genId();
     let new_lm = request.body;
+    new_lm.files = request.files.map(file => ({
+        url: file.url,
+        id: file.public_id,
+        is360: false
+    }))
     new_lm.id = id;
     console.log("create request: " + id);
     console.log(new_lm);
@@ -36,17 +51,30 @@ function createLandmark(request, response){
         if (err) return console.error(err);
     });
     // response.redirect('/' + id)
-    response.json({'id': id});
+    response.json({
+        'id': id,
+        'new_files': new_lm.files
+    });
 }
 
 function editLandmark(request, response){
     let id = request.params.id;
     let new_lm = request.body;
+    let new_files = request.files.map(file => ({
+        url: file.url, // might need to be string?
+        id: file.public_id,
+        is360: false
+    }));
+    // TODO need to be able to remove previous files
+
     console.log("edit request: " + id);
     console.log(new_lm);
     
-    Landmark.updateOne({"id": id}, new_lm, { runValidators: true });
-    response.json({'ok': 1}); // ....????
+    Landmark.updateOne({"id": id}, {
+        $push: { files: { $each: new_files } }, // might need to be string?
+        $set: new_lm,
+      }, { runValidators: true });
+    response.json({'new_files': new_lm.files}); // ....????
 }
 
 function deleteLandmark(request, response){

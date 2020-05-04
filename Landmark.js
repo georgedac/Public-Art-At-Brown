@@ -20,7 +20,6 @@ process.on('SIGINT', function() {
 });
 const url = 'mongodb+srv://dbUser:webapps@cluster0-w0tlw.mongodb.net/test?retryWrites=true&w=majority';
 mongoose.connect(url, {useNewUrlParser: true});
-
 const landmarkSchema = new mongoose.Schema({
     id: String,
     title: String,
@@ -31,7 +30,9 @@ const landmarkSchema = new mongoose.Schema({
         lng: Number
     },
     files: [{
-        url: String
+        url: String,
+        id: String,
+        is360: Boolean
     }]
 });
     

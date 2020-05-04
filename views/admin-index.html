@@ -39,6 +39,7 @@
   <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
   <script>
+    // global variables
     let locs = [
       {
         title: "Untitled (Lamp/Bear)", 
@@ -55,6 +56,7 @@
     let showingTempMarker = false;
     let tempMarkerID = null;
     let map = null;
+    // end global variables
 
     function replaceNewline(input) {
       return input.replace(/(\r\n|\n|\r)/gm, '<br/>'); // String.fromCharCode(13, 10)
@@ -65,13 +67,18 @@
       return `
       <div id="carousel" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
-          ${loc.files.map((src,idx) => 
+          ${loc.files.map((file,idx) => 
           `<li data-target="#carousel" data-slide-to="${idx}" ${(idx==0)?"class='active'":""}></li>`)}
         </ol>
         <div class="carousel-inner">
-          ${loc.files.map((src,idx) => 
+          ${loc.files.map((file,idx) => 
             `<div class="carousel-item ${(idx==0)?"active":""}">
-              <img class="size-img" src=${src}>
+              <iframe src=${
+                (file.is360 ?
+                 `https://storage.googleapis.com/vrview/2.0/embed?image=${file.url}`: // check this vs video=
+                 file.url)
+              }>
+              </iframe>
             </div>`
             )}
         </div>
@@ -90,7 +97,7 @@
     function locationWindow(idx) {
       let loc = locs[idx];
       let carousel = getCarousel(loc);
-      return `<div>
+      let content = `<div>
             ${carousel}
             <h1 class="title">${loc.title}</h1>
             <div>
@@ -99,6 +106,8 @@
             </div>
             <button type="button" onclick="editWindow(${idx})">Edit</button>
           </div>`;
+      infowindow.setContent(content);
+      infowindow.open(map, markers[idx]);
     }
 
     function editWindow(idx) {
@@ -106,17 +115,43 @@
       let carousel = getCarousel(loc);
       let content = `<div>
             ${carousel}
-            <button type="button">Upload</button>
-            <form method="POST" action="/landmarks/${loc.id} id="editForm">
+            <form id="editForm">
+              <label for="formFiles">Upload (hold CTRL or SHIFT to select multiple):</label>
+              <input type="file" id="formFiles" name="files" multiple><br><br>
               <label for="formTitle">Title:</label><br>
-              <input type="text" id="formTitle" name="formTitle" value="${loc.title}"><br>
+              <input type="text" id="formTitle" name="title" value="${loc.title}"><br>
               <label for="formArtist">Artist(s):</label><br>
-              <input type="text" id="formArtist" name="formArtist" value="${loc.artists}"><br>
+              <input type="text" id="formArtist" name="artists" value="${loc.artists}"><br>
               <label for="formDescription">Description:</label><br>
-              <textarea name="formDescription" id="formDescription" style="width:562px;height:100px;">${loc.description}</textarea><br>
-              <button type="button">Cancel</button>
+              <textarea id="formDescription" name="description" style="width:562px;height:100px;">${loc.description}</textarea><br>
+              <button type="button" onclick=locationWindow(${idx})>Cancel</button>
               <button type="button" onclick="onDelete(${idx})">Delete</button>
               <button type="button" onclick="onEdit(${idx})">Save</button>
+            </form>
+          </div>`;
+      infowindow.setContent(content);
+      infowindow.open(map, markers[idx]);
+    }
+
+    function createWindow(idx) {
+      showingTempMarker= false;
+      locs[idx] = {title: "", artist: "", description: "", files: []};
+      loc = locs[idx];
+      let carousel = getCarousel(loc);
+      let content = `<div>
+            ${carousel}
+            <button type="button">Upload</button>
+            <form id="createForm">
+              <label for="cFormFiles">Upload (hold CTRL or SHIFT to select multiple):</label>
+              <input type="file" id="cFormFiles" name="files" multiple><br><br>
+              <label for="cFormTitle">Title:</label><br>
+              <input type="text" id="cFormTitle" name="title" value="${loc.title}"><br>
+              <label for="cFormArtist">Artist:</label><br>
+              <input type="text" id="cFormArtist" name="artists" value="${loc.artist}"><br>
+              <label for="cFormDescription">Description:</label><br>
+              <textarea id="cFormDescription" name="description" style="width:562px;height:100px;">${loc.description}</textarea><br>
+              <button type="button" onclick="removeMarker(${idx})">Cancel</button>
+              <button type="button" onclick="onCreate(${idx})">Save</button>
             </form>
           </div>`;
       infowindow.setContent(content);
@@ -143,6 +178,7 @@
       // ftitle, artist, description
       // TODO upload (files)
       // TODO allow people to move markers? show current location w/ lng/lat?
+      let formData = new FormData(document.getElementById('editForm'));
       const loc = locs[idx];
       let message = {
         'title': document.getElementById('formTitle').value,
@@ -156,47 +192,21 @@
       locs[idx].description = message.description;
       markers[idx].setTitle(message.title); // might need to refresh
       fetch(`/landmarks/${loc.id}`, {
-        method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(message),
+        method: 'PUT',
+        body: formData,
       })
         .then(response => response.json())
         .then(data => {
           console.log("got data back from edit!");
+          // update with new_files
+          loc[idx].files.push(...data['new_files']);
+          // TODO force refresh??
         })
-    }
-
-    function createWindow(idx) {
-      showingTempMarker= false;
-      locs[idx] = {title: "", artist: "", description: "", files: []};
-      loc = locs[idx];
-      let carousel = getCarousel(loc);
-      let content = `<div>
-            ${carousel}
-            <button type="button">Upload</button>
-            <form>
-              <label for="cFormTitle">Title:</label><br>
-              <input type="text" id="cFormTitle" name="cFormTitle" value="${loc.title}"><br>
-              <label for="cFormArtist">Artist:</label><br>
-              <input type="text" id="cFormArtist" name="cFormArtist" value="${loc.artist}"><br>
-              <label for="cFormDescription">Description:</label><br>
-              <textarea name="cFormDescription" id="cFormDescription" style="width:562px;height:100px;">${loc.description}</textarea><br>
-              <button type="button" onclick="removeMarker(${idx})">Cancel</button>
-              <button type="button" onclick="onCreate(${idx})">Save</button>
-            </form>
-          </div>`;
-      infowindow.setContent(content);
-      infowindow.open(map, markers[idx]);
+      locationWindow(idx);
     }
 
     function onCreate(idx) {
-
-      // ftitle, artist, description
-      // TODO upload (files)
-      // location ({lat, lng})
+      let formData = new FormData(document.getElementById('editForm'));
       console.log(document.getElementById('cFormTitle').value);
       console.log(document.getElementById('cFormArtist').value);
       console.log(document.getElementById('cFormDescription').value);
@@ -235,16 +245,14 @@
       console.log(message);
       fetch(`/landmarks`, {
         method: 'POST',
-        headers: {
-          'Accept': 'application/json',
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(message),
+        body: formData,
       })
         .then(response => response.json())
         .then(data => {
           console.log("got an id back from create! id:" + data.id);
           locs[idx].id = data.id;
+          loc[idx].files.push(...data['new_files']);
+          // TODO force refresh??
         })
     }
 
@@ -261,7 +269,7 @@
       console.log("removed marker");
     }
 
-    function getLocs() {
+    function initializeLandmarks() {
       fetch('/landmarks')
         .then(response => response.json())
         .then(data => {
@@ -273,8 +281,7 @@
               title: loc.title,
               map: map});
             marker.addListener('click', function() {
-              infowindow.setContent(locationWindow(idx));
-              infowindow.open(map, marker);
+              locationWindow(idx);
             });
             return marker;
           })
@@ -294,13 +301,12 @@
            },
           ]
         });
+
       infowindow = new google.maps.InfoWindow();
-        // center the view
+      // center the view
       var marker = new google.maps.Marker({position: providence, map: map});
       marker.setVisible(false);
-      
-      // load current landmarks
-      getLocs();
+      initializeLandmarks();
       
       // set up click to create
       google.maps.event.addListener(map, 'click', function(event) {
