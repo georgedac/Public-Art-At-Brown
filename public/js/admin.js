@@ -16,6 +16,8 @@ let showingTempMarker = false;
 let tempMarkerID = null;
 let map = null;
 let searchString = "";
+let moving = false;
+let movingID = null;
 // end global variables
 
 function replaceNewline(input) {
@@ -101,6 +103,7 @@ function editWindow(idx) {
           <textarea id="formDescription" name="description" style="width:562px;height:100px;">${loc.description}</textarea><br>
           <button type="button" onclick=locationWindow(${idx})>Cancel</button>
           <button type="button" onclick="onDelete(${idx})">Delete</button>
+          <button type="button" onclick="onMove(${idx})">Move</button>
           <button type="button" onclick="onEdit(${idx})">Save</button>
         </form>
       </div>`;
@@ -149,6 +152,15 @@ function onDelete(idx) {
       console.log("got something back from delete!");}) // check if good response I guess?
 }
 
+function onMove(idx) {
+  infowindow.close();
+  let oldIcon = markers[idx].getIcon();
+  markers[idx].setIcon('images/grey-dot.png');
+  // document.getElementById("myP").style.cursor = "crosshair";
+  moving = true;
+  movingID = idx;
+}
+
 function onEdit(idx) {
   // ftitle, artist, description
   // TODO upload (files)
@@ -182,10 +194,11 @@ function onEdit(idx) {
 }
 
 function onCreate(idx) {
-  let formData = new FormData(document.getElementById('editForm'));
-  console.log(document.getElementById('cFormTitle').value);
-  console.log(document.getElementById('cFormArtist').value);
-  console.log(document.getElementById('cFormDescription').value);
+  let formData = new FormData(document.getElementById('createForm'));
+  formData.append('lat', markers[idx].getPosition().lat());
+  formData.append('lng', markers[idx].getPosition().lng());
+  
+  // update local storage (message is just for reference convenience)
   let message = {
     'title': document.getElementById('cFormTitle').value,
     'artists': document.getElementById('cFormArtist').value,
@@ -196,8 +209,6 @@ function onCreate(idx) {
     },
     'files': []
   }
-
-  // update local storage
   locs[idx].title = message.title;
   locs[idx].artists = message.artists;
   locs[idx].description = message.description;
@@ -231,6 +242,38 @@ function onCreate(idx) {
       console.log(data['new_files']);
       Array.prototype.push.apply(locs[idx].files, data['new_files']);
       // TODO force refresh??
+    })
+}
+
+function moveMarker(movingID, idx) {
+  moving = false;
+  let loc = locs[movingID];
+  showingTempMarker= false;
+  // create non-temporary marker to handle click events
+  let marker = new google.maps.Marker({
+    position: markers[idx].getPosition(), 
+    title: loc.title, 
+    map: map
+  });
+  marker.addListener('click', function() {
+    infowindow.setContent(locationWindow(idx));
+    infowindow.open(map, marker);
+  });
+  removeMarker(idx);
+  removeMarker(movingID);
+  markers[movingID] = marker;
+
+  let formData = new FormData();
+  formData.append('lat', markers[movingID].getPosition().lat());
+  formData.append('lng', markers[movingID].getPosition().lng()); 
+  // hopefully this wont' be mad since I don't have files
+  fetch(`/landmarks/${loc.id}`, {
+    method: 'PUT',
+    body: formData,
+  })
+    .then(response => response.json())
+    .then(data => {
+      console.log("got data back from location edit!");
     })
 }
 
@@ -355,16 +398,22 @@ function initMap() {
     placeMarker(event.latLng);
     showingTempMarker = true;
     tempMarkerID = idx;
-    let content = `
-  <button type="button" onclick="removeMarker(${idx})">Remove</button>
-  `;
-    markers[idx].addListener('click', function() {
-      infowindow.setContent(content);
-      infowindow.open(map, this);
-    });
-    infowindow.setContent(`
-  <button type="button" onclick="createWindow(${idx})">Add New</button>
-  `);
+    if(moving){
+      infowindow.setContent(`
+        <button type="button" onclick="moveMarker(${movingID}, ${idx})">Move here</button>
+        `);
+    } else {
+      infowindow.setContent(`
+    <button type="button" onclick="createWindow(${idx})">Add New</button>
+    `);
+      let onClickContent = `
+    <button type="button" onclick="removeMarker(${idx})">Remove</button>
+    `;
+      markers[idx].addListener('click', function() {
+        infowindow.setContent(onClickContent);
+        infowindow.open(map, this);
+      });
+    }
     infowindow.open(map, markers[idx]);
   });
   // workaround for cleaning up old markers when clicking elsewhere

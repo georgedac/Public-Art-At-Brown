@@ -38,6 +38,12 @@ function getLandmarks(request, response) {
 function createLandmark(request, response){
     const id = genId();
     let new_lm = request.body;
+    new_lm.location = {
+        lat: new_lm.lat,
+        lng: new_lm.lng
+    }
+    delete new_lm.lat;
+    delete new_lm.lng;
     console.log(request.files);
     new_lm.files = request.files.map(file => ({
         url: file.url,
@@ -63,6 +69,15 @@ function createLandmark(request, response){
 function editLandmark(request, response){
     let id = request.params.id;
     let new_lm = request.body;
+    if(new_lm.lat){
+        new_lm.location = {
+            lat: new_lm.lat,
+            lng: new_lm.lng
+        }
+        delete new_lm.lat;
+        delete new_lm.lng;
+    }
+    if(!request.files){request.files = [];}
     console.log(request.files);
     let new_files = request.files.map(file => ({
         url: file.url, // might need to be string?
