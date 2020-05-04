@@ -228,10 +228,9 @@ h1 {
         padding: 10vw;
     }
     
-    #mobile-close{
-        border-radius: 50%;
-        left: 90%;
-    }
+    /* #mobile-close{
+        left: 0;
+    } */
 
     #brand {
         align-self: center;

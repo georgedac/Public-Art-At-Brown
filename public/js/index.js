@@ -68,7 +68,7 @@ function windowContent(idx, expand=false) {
     </a>
   </div>
   `;
-  return `<div class="infowindow ${expand?"mobile-pad":""}">
+  return `<div id="locWindow" class="infowindow ${expand?"mobile-pad":""}">
         <div class="hide-mobile">${carousel}</div>
         ${(loc.files.length > 0)?(expand ? carousel: `<img class="w-100 show-mobile" src=${loc.files[0].url}>`):""}
         <h1 class="title">${loc.title}</h1>
@@ -83,13 +83,16 @@ function windowContent(idx, expand=false) {
 
 function mobileExpand(idx){
   let content = `
-  <button type="button" id="mobile-close" class="btn btn-secondary fix-top" onclick=mobileClose()>X</button>
+  <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #C00404;">
+    <button type="button" id="mobile-close" style="color: white;font-weight:bold;" onclick=mobileClose()>Close</button>
+  </nav>
   ${windowContent(idx, true)}
   `;
   document.getElementById('infowindow').innerHTML = content;
   document.getElementById('infowindow').style.background = "white";
   document.getElementById('infowindow').style.opacity = "1";
   document.getElementById('infowindow').style.minHeight = "100%";
+  bodyScrollLock.disableBodyScroll(document.getElementById('infowindow'));
 }
 
 function mobileClose(){
@@ -98,6 +101,7 @@ function mobileClose(){
   document.getElementById('infowindow').style.background = "transparent";
   document.getElementById('infowindow').style.opacity = "0";
   document.getElementById('infowindow').style.minHeight = "0";
+  bodyScrollLock.enableBodyScroll(document.getElementById('infowindow'));
 }
 
 function haversine_distance(mk1, pos) {
@@ -125,6 +129,7 @@ function initializeLandmarks() {
           map: map});
         marker.addListener('click', function() {
           infowindow.setContent(windowContent(idx));
+          bodyScrollLock.disableBodyScroll(document.getElementById('locWindow'));
           infowindow.open(map, marker);
         });
         return marker;
@@ -249,4 +254,7 @@ function initMap() {
 
   // put markers on map
   initializeLandmarks();
+
+  // make scrolling on mobile happy
+  bodyScrollLock.disableBodyScroll(document.getElementById('map'));
 }
