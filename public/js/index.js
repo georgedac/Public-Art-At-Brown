@@ -77,7 +77,7 @@ function windowContent(idx, expand=false) {
           <p class="desc hide-mobile">${replaceNewline(loc.description)}</p>
           ${expand?`<p class="desc">${replaceNewline(loc.description)}</p>`:""}
         </div>
-        ${expand?"":`<button type="button" id="mobile-expand" class="btn btn-secondary show-mobile" onclick=mobileExpand(${idx})>Details</button>`}
+        ${expand?"":`<button type="button" id="mobile-expand" style="align-self:center;" class="btn btn-secondary show-mobile" onclick=mobileExpand(${idx})>Details</button>`}
       </div>`;
 }
 
