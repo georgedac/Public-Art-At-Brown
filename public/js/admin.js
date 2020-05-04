@@ -74,7 +74,7 @@ function getCarousel(idx) {
 function locationWindow(idx) {
   let loc = locs[idx];
   let carousel = getCarousel(idx);
-  let content = `<div>
+  let content = `<div class="infowindow">
         ${carousel}
         <h1 class="title">${loc.title}</h1>
         <div>
@@ -90,7 +90,7 @@ function locationWindow(idx) {
 function editWindow(idx) {
   let loc = locs[idx];
   let carousel = getCarousel(idx);
-  let content = `<div>
+  let content = `<div class="infowindow">
         ${carousel}
         <form id="editForm">
           <label for="formFiles">Upload (hold CTRL or SHIFT to select multiple):</label><br>
@@ -116,7 +116,7 @@ function createWindow(idx) {
   locs[idx] = {title: "", artist: "", description: "", files: []};
   loc = locs[idx];
   let carousel = getCarousel(idx);
-  let content = `<div>
+  let content = `<div class="infowindow">
         ${carousel}
         <button type="button">Upload</button>
         <form id="createForm">
@@ -222,8 +222,7 @@ function onCreate(idx) {
     map: map
   });
   marker.addListener('click', function() {
-    infowindow.setContent(locationWindow(idx));
-    infowindow.open(map, marker);
+    locationWindow(idx);
   });
   removeMarker(idx);
   markers[idx] = marker;
