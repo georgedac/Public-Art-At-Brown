@@ -89,7 +89,7 @@ function mobileExpand(idx){
   document.getElementById('infowindow').innerHTML = content;
   document.getElementById('infowindow').style.background = "white";
   document.getElementById('infowindow').style.opacity = "1";
-  document.getElementById('infowindow').style.height = "100%";
+  document.getElementById('infowindow').style.minHeight = "100%";
 }
 
 function mobileClose(){
@@ -97,7 +97,7 @@ function mobileClose(){
   document.getElementById('infowindow').innerHTML = "";
   document.getElementById('infowindow').style.background = "transparent";
   document.getElementById('infowindow').style.opacity = "0";
-  document.getElementById('infowindow').style.height = "0";
+  document.getElementById('infowindow').style.minHeight = "0";
 }
 
 function haversine_distance(mk1, pos) {
