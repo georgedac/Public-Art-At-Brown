@@ -99,8 +99,7 @@ h1 {
 }
 
 .searchWrapper {
-    margin-top: 10px;
-    padding: 0 0 0 230px;
+    margin: 10px 0 0 230px;
     z-index: 100;
     position: absolute;
     top: 0;

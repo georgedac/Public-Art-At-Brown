@@ -156,31 +156,31 @@ function initMap() {
         featureType: "poi.sports_complex",
         elementType: "geometry.fill",
         stylers: [{color: "#e4ecd9"}]
-      },
-      {
-        featureType: "road",
-        elementType: "geometry.fill",
-        stylers: [{color: "#fdf4dd"}]
-      },
-      {
-        featureType: "road",
-        elementType: "geometry.stroke",
-        stylers: [{color: "#b8bdc8"}]
-      },
-      {
-        featureType: "road",
-        elementType: "labels.icon",
-        stylers: [{visibility: "off"}]
-      },
-      {
-        featureType: "road.local",
-        elementType: "geometry.stroke",
-        stylers: [{weight: 0.5}]
-      },
-      {
-        elementType: "labels.text.stroke",
-        stylers: [{visibility: "off"}]
-        }
+      }
+    //   {
+    //     featureType: "road",
+    //     elementType: "geometry.fill",
+    //     stylers: [{color: "#fdf4dd"}]
+    //   },
+    //   {
+    //     featureType: "road",
+    //     elementType: "geometry.stroke",
+    //     stylers: [{color: "#b8bdc8"}]
+    //   },
+    //   {
+    //     featureType: "road",
+    //     elementType: "labels.icon",
+    //     stylers: [{visibility: "off"}]
+    //   },
+    //   {
+    //     featureType: "road.local",
+    //     elementType: "geometry.stroke",
+    //     stylers: [{weight: 0.5}]
+    //   },
+    //   {
+    //     elementType: "labels.text.stroke",
+    //     stylers: [{visibility: "off"}]
+    //     }
     ]
   });
   infowindow = new google.maps.InfoWindow();
