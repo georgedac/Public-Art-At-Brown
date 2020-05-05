@@ -17,7 +17,6 @@ let locs = [
 let infowindow = null;
 let markers = [];
 let searchString = "";
-let listView = document.getElementById("listView");
 // end global variables
 
 // Helper functions
@@ -87,24 +86,27 @@ function windowContent(idx, expand=false) {
 function mobileExpand(idx){
   let content = `
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #C00404;">
-    <button type="button" id="mobile-close" style="color: white;font-weight:bold;" onclick=mobileClose()>Close</button>
+    <button type="button" id="mobile-close" style="color: white;font-weight:bold;" onclick=mobileClose(${idx})>Close</button>
   </nav>
   ${windowContent(idx, true)}
   `;
-  document.getElementById('infowindow').innerHTML = content;
-  document.getElementById('infowindow').style.background = "white";
-  document.getElementById('infowindow').style.opacity = "1";
-  document.getElementById('infowindow').style.minHeight = "100%";
-  bodyScrollLock.disableBodyScroll(document.getElementById('infowindow'));
+  document.getElementById('markerWrapper' + idx).innerHTML = content;
+  document.getElementById('markerWrapper' + idx).style.background = "white";
+  document.getElementById('markerWrapper' + idx).style.opacity = "1";
+  document.getElementById('markerWrapper' + idx).style.minHeight = "100vh";
+  document.getElementById('markerWrapper' + idx).style.position = "fixed"; 
+  document.getElementById('markerWrapper' + idx).style.top = "0";
+  document.getElementById('markerWrapper' + idx).style.left = "0";
+  document.getElementById('markerWrapper' + idx).style.zIndex= "2";
+  bodyScrollLock.disableBodyScroll(document.getElementById('markerWrapper' + idx));
 }
   
-function mobileClose(){
-  infowindow.close();
-  listView.innerHTML = "";
-  listView.style.background = "transparent";
-  listView.style.opacity = "0";
-  listView.style.minHeight = "0";
-  bodyScrollLock.enableBodyScroll(listView);
+function mobileClose(idx){
+  document.getElementById('markerWrapper' + idx).innerHTML = windowContent(idx);
+  document.getElementById('markerWrapper' + idx).style.minHeight = "0";
+  document.getElementById('markerWrapper' + idx).style.position = "relative"; 
+  document.getElementById('markerWrapper' + idx).style.zIndex= "1";
+  bodyScrollLock.enableBodyScroll(document.getElementById('markerWrapper' + idx));
 }
 
 fetch('/landmarks')
@@ -113,7 +115,10 @@ fetch('/landmarks')
     console.log(data)
     locs = data;
     markers = locs.map((loc,idx) => {
-        listView.innerHTML += windowContent(idx);
+      let marker = document.createElement("div");
+      marker.id = "markerWrapper" + idx;
+      marker.innerHTML = windowContent(idx);
+      document.getElementById("listView").appendChild(marker);
     })
     return markers
 });
