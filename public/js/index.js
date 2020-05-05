@@ -122,10 +122,14 @@ function initializeLandmarks() {
     .then(data => {
       console.log(data)
       locs = data;
+      let icons = {
+        url: "images/marker1.png"
+      };
       markers = locs.map((loc,idx) => {
         let marker = new google.maps.Marker({
           position: loc.location, 
           title: loc.title,
+          icon: icons,
           map: map});
         marker.addListener('click', function() {
           infowindow.setContent(windowContent(idx));
@@ -223,6 +227,12 @@ function initMap() {
     map: map
   });
   currentloc.setVisible(false);
+
+/* THIS IS JUST TO SHOW BOTH TYPES OF MARKERS I MADE, DELETE LATER*/
+  new google.maps.Marker({
+    position: providence, 
+    icon: 'images/marker2.png',
+    map: map});
 
   // If user's location is close to campus, center on that
   if (navigator.geolocation) {
