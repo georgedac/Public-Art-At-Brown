@@ -12,6 +12,7 @@ body {
     display: flex;
     font-family: 'Lato', sans-serif;
     color: #000000;
+    font-size: min(max(14px, 4vw), 16px);
 }
 
 div {
@@ -59,7 +60,7 @@ h1 {
 
 #menu li {
     padding: 5px 0;
-    font-size: 18px;
+    font-size: min(max(16px, 4vw), 18px);
 }
 
 #menu li:hover {
@@ -150,20 +151,10 @@ h1 {
     overflow: auto;
 }
 
-.listItem {
-    border: 3px solid #000000;
-    border-radius: 4px;
-    background-color: #98A4AE;
-}
-
 .listItem img {
     width: 100%;
     height: 200px;
     object-fit: cover;
-}
-
-.listItemText {
-    padding: 0 10px;
 }
 
 #infowindow {
@@ -187,6 +178,24 @@ h1 {
     border-width: 0;
     padding: 10px 20px;
     border-radius: 5px;
+}
+
+.skip-link {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 210px;
+    z-index: -1;
+    padding: 15px;
+    background-color: #C6CDD2;
+    font-size: 18px;
+    text-decoration: none;
+    color: #000000;
+    text-align: center;
+}
+
+.skip-link:focus {
+    z-index: 3;
 }
 
 /*These next few are for the styling of the list view text boxes*/
@@ -233,9 +242,9 @@ h1 {
         padding: 10vw;
     }
     
-    /* #mobile-close{
+    /*#mobile-close{
         left: 0;
-    } */
+    }*/
 
     #brand {
         align-self: center;
@@ -257,7 +266,7 @@ h1 {
         flex-direction: column;
         position: absolute;
         width: 100%;
-        min-height: 0;
+        height: 0;
         top: 0;
         left: 0;
         opacity: 0;
