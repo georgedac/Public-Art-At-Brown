@@ -137,6 +137,10 @@ h1 {
     align-items: center;
 }
 
+#locWindow {
+    overflow: auto;
+}
+
 /*These next classes are specific to the grid view*/
 #listView {
     display: grid;
@@ -145,6 +149,7 @@ h1 {
     margin-top: 70px;
     grid-gap: 10px;
     padding: 0 20px;
+    overflow: auto;
 }
 
 .listItem img {
