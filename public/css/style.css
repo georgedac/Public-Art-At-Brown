@@ -82,12 +82,12 @@ h1 {
 /* These next three are for the search bar */
 
 #mainSearch {
-    width: 50vw;
+    width: 45vw;
     height: 38px;
     margin: 0;
-    padding: 0 0 0 55px;
-    border-top-right-radius: 500px;
-    border-bottom-right-radius: 500px;
+    padding: 0 0 0 20px;
+    border-top-left-radius: 500px;
+    border-bottom-left-radius: 500px;
     border: 2px solid #ED1C24;
 }
 
@@ -95,6 +95,7 @@ h1 {
     width: 38px;
     height: 38px;
     position: absolute;
+    right: 0;
     z-index: 5;
     padding: 5px 5px;
     border: 2px solid #ED1C24;
@@ -270,27 +271,28 @@ h1 {
         width: 100%;
         height: 38px;
         margin: 0;
-        padding: 0 0 0 55px;
-        border-top-right-radius: 500px;
-        border-bottom-right-radius: 500px;
+        padding: 0 0 0 15px;
+        border-top-left-radius: 500px;
+        border-bottom-left-radius: 500px;
         border: 2px solid #ED1C24;
     }
 
     .searchWrapper img {
         width: 38px;
         height: 38px;
-        position: static;
+        /*position: static;*/
         z-index: auto;
         padding: 5px 5px;
         border: 2px solid #ED1C24;
-        display: block;
-        margin-top: -38px;
+        /*display: block;
+        margin-top: -38px;*/
     }
     
     .searchWrapper {
         margin: 0 0 0 0;
         z-index: auto;
-        position: static;
+        position: relative;
+        margin-top: -24px;
     }
 
     #sidebar{
