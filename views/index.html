@@ -21,7 +21,7 @@
       <li><a>About</a></li>
       <li><a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Admin</a></li>
     </ul>
-    <form class="collapse" id="collapseExample" role="form">
+    <form class="collapse" id="collapseExample" action="/login" method="post">
       <div class="form-group">
         <label for="username">Username:</label><br>
         <input type="text" id="username" name="username" class="form-control form-control-sm">
@@ -30,7 +30,7 @@
         <label for="password">Password:</label><br>
         <input type="text" id="password" name="password" class="form-control form-control-sm">
       </div>
-      <a class="btn btn-primary" href="/admin">Submit</a>
+      <button type="submit" class="btn btn-primary">Submit</button>
     </form>
   </div>
   <div id="main" role="main">
