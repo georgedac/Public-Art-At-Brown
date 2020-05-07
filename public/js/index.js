@@ -40,6 +40,15 @@ const handleSearch = event => {
 }
 document.getElementById("mainSearch").addEventListener("input", handleSearch)
 
+function toggleForm() {
+  let form = document.getElementById("signinForm");
+  if (form.style.left == "-300px" || form.style.left == "") {
+    form.style.left = "0px";
+  } else {
+    form.style.left = "-300px";
+  }
+}
+
 function windowContent(idx, expand=false) {
   let loc = locs[idx];
   if (!loc.files) loc.files=[];

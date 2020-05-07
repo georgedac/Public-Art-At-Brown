@@ -7,21 +7,21 @@
   <link rel="icon" 
         type="image/png" 
         href="images/favicon.ico">
-  <link href="https://fonts.googleapis.com/css?family=Lato&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css?family=Alatsi|Lato&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
   <link rel="stylesheet" type="text/css" href="css/style.css">
 </head>
 <body>
   <a class="skip-link" href="#main">Skip to main content</a>
   <div id="sidebar" role="navigation">
-    <h1>Public Art <br />@<br /> Brown</h1>
+    <h1>Public Art <br />@ Brown</h1>
     <ul id="menu">
       <li><a href="/">Map</a></li>
       <li class="active"><a href="/list">List</a></li>
       <li><a>About</a></li>
-      <li><a data-toggle="collapse" href="#collapseExample" role="button" aria-expanded="false" aria-controls="collapseExample">Admin</a></li>
+      <li><a onclick="toggleForm()" role="button" aria-expanded="false" aria-controls="signinForm">Admin</a></li>
     </ul>
-    <form class="collapse" id="collapseExample" action="/login" method="post">
+    <form id="signinForm" action="/login" method="post">
       <div class="form-group">
         <label for="username">Username:</label><br>
         <input type="text" id="username" name="username" class="form-control form-control-sm">
@@ -32,6 +32,7 @@
       </div>
       <button type="submit" class="btn btn-primary">Submit</button>
     </form>
+    <img src="images/homegraphic.png" />
   </div>
   <div id="main" role="main">  
     <nav class="navbar show-mobile navbar-expand-lg navbar-dark" style="background-color: #C00404;">
