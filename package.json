@@ -18,11 +18,15 @@
   "homepage": "https://github.com/georgedac/Public-Art-At-Brown#readme",
   "dependencies": {
     "cloudinary": "^1.21.0",
+    "connect-ensure-login": "^0.1.1",
     "cookie-parser": "^1.4.5",
     "express": "^4.17.1",
+    "express-session": "^1.17.1",
     "mongoose": "^5.9.11",
     "multer": "^1.4.2",
     "multer-storage-cloudinary": "^2.2.1",
+    "passport": "^0.4.1",
+    "passport-local": "^1.0.0",
     "path": "^0.12.7"
   }
 }

@@ -5,6 +5,10 @@ const path = require('path');
 const multer = require("multer");
 const cloudinary = require("cloudinary");
 const cloudinaryStorage = require("multer-storage-cloudinary");
+const passport = require('passport');
+const LocalStrategy = require('passport-local').Strategy;
+const expressSession = require('express-session');
+const ensureLogin = require('connect-ensure-login');
 
 // import handlers
 const dbHandler = require('./controllers/db.js');
@@ -31,6 +35,40 @@ app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
+// set up auth
+passport.use(new LocalStrategy(
+    function(username, password, done) {
+        console.log("checking creds");
+        if(username == "admin" && password == "admin"){
+            console.log("checks out");
+            return done(null, {id: "1"});
+        }
+        console.log("nah bad creds");
+        return done(null, false);
+    }
+  ));
+  // Configure Passport authenticated session persistence.
+//
+// In order to restore authentication state across HTTP requests, Passport needs
+// to serialize users into and deserialize users out of the session.  The
+// typical implementation of this is as simple as supplying the user ID when
+// serializing, and querying the user record by ID from the database when
+// deserializing.
+passport.serializeUser(function(user, cb) {
+    cb(null, user.id);
+  });
+  
+  passport.deserializeUser(function(id, cb) {
+    if(id == "1") {
+        return cb(null, {id: "1"});
+    } else {
+        cb("problem", false);
+    }
+  });
+
+app.use(expressSession({ secret: 'blueno', resave: false, saveUninitialized: false }));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // // If you choose not to use handlebars as template engine, you can safely delete the following part and use your own way to render content
 // // view engine setup
@@ -47,7 +85,18 @@ app.delete('/landmarks/:id', dbHandler.deleteLandmark);
 app.get('/list', function(req, res) {
     res.sendFile(path.join(__dirname + '/views/list.html'));
 });
-app.get('/admin', function(req, res) {
+app.post('/login', 
+passport.authenticate('local', { failureRedirect: '/' }),
+function(req, res) {
+  res.redirect('/admin');
+});
+app.get('/logout', function(req, res){
+    req.logout();
+    res.redirect('/');
+});
+app.get('/admin', 
+ensureLogin.ensureLoggedIn(),
+function(req, res) {
     res.sendFile(path.join(__dirname + '/views/admin-index.html'));
 });
 app.get('/', function(req, res) {
