@@ -93,13 +93,14 @@ h1 {
     top: 0;
 }
 
-#carousel{
-    background-color: gray;
-}
+/*These are for the carousel*/
 
-.carousel-inner {
-    width:100%;
-    max-height: 200px !important;
+#carousel{
+    background-color: white;
+    width: 100%;
+    overflow: scroll;
+    display: flex;
+    flex-direction: row;
 }
 
 .size-img {
@@ -107,15 +108,23 @@ h1 {
     max-height: 200px;
 }
 
-.carousel-item{
-    display:flex;
+.carousel-item-custom{
+    /* display:flex;
     flex-direction: column;
-    align-items: center;
+    align-items: center; */
+    height: 200px;
+    width: 70%;
 }
-.carousel-item.active{
-    display:flex;
-    flex-direction: column;
-    align-items: center;
+
+.carousel-item-single-custom {
+    flex: 0 0 auto;
+    height: 200px;
+    width: 100%;
+}
+
+.carousel-item-custom img {
+    height: 200px;
+    object-fit: cover;
 }
 
 .skip-link {

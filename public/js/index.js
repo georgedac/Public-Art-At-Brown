@@ -44,38 +44,34 @@ function windowContent(idx, expand=false) {
   let loc = locs[idx];
   if (!loc.files) loc.files=[];
   let carousel = `
-  <div id="carousel" class="carousel slide" data-ride="carousel">
-    <ol class="carousel-indicators">
-      ${loc.files.map((file,idx) => 
-      `<li data-target="#carousel" data-slide-to="${idx}" ${(idx==0)?"class='active'":""}></li>`)}
-    </ol>
-    <div class="carousel-inner">
-      ${loc.files.map((file,idx) => 
-        `<div class="carousel-item ${(idx==0)?"active":""}">
-          ${(file.is360 ?
-            `<iframe class="size-img" title="images of this artwork" src=https://storage.googleapis.com/vrview/2.0/embed?image=${file.url}></iframe>`:
-            `<img class="size-img" src="${file.url}" alt="${loc.title}">`)}
-        </div>`
-        )}
-    </div>
-    <a class="carousel-control-prev" href="#carousel" role="button" data-slide="prev">
-      <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-      <span class="sr-only">Previous</span>
-    </a>
-    <a class="carousel-control-next" href="#carousel" role="button" data-slide="next">
-      <span class="carousel-control-next-icon" aria-hidden="true"></span>
-      <span class="sr-only">Next</span>
-    </a>
+  <div id="carousel" class="carousel-custom">
+    ${(loc.files.length == 1) ? 
+      `<div class="carousel-item-single-custom">
+      ${(loc.files[0].is360 ?
+        `<iframe title="images of this artwork" src=https://storage.googleapis.com/vrview/2.0/embed?image=${loc.files[0].url}></iframe>`:
+        `<img src="${loc.files[0].url}" alt="${loc.title}">`)}
+      </div>`
+    : 
+    loc.files.map((file,idx) => 
+      `<div class="carousel-item-custom ${(idx==0)?"active":""}">
+        ${(file.is360 ?
+          `<iframe title="images of this artwork" src=https://storage.googleapis.com/vrview/2.0/embed?image=${file.url}></iframe>`:
+          `<img src="${file.url}" alt="${loc.title}">`)}
+      </div>`
+      )}
+    
   </div>
   `;
-  return `<div id="locWindow" class="infowindow ${expand?"mobile-pad":""}">
+  return `<div id="locWindow" class="infowindow">
         <div class="hide-mobile">${carousel}</div>
         ${(loc.files.length > 0)?(expand ? carousel: `<img class="w-100 show-mobile" alt="${loc.title}" src=${loc.files[0].url}>`):""}
-        <h1 class="title">${loc.title}</h1>
-        <div>
-          <p class="artist">Artist: ${loc.artists}</p>
-          <p class="desc hide-mobile">${replaceNewline(loc.description)}</p>
-          ${expand?`<p class="desc">${replaceNewline(loc.description)}</p>`:""}
+        <div ${expand?`class="mobile-pad"`:""}>
+          <h1 class="title">${loc.title}</h1>
+          <div>
+            <p class="artist">Artist: ${loc.artists}</p>
+            <p class="desc hide-mobile">${replaceNewline(loc.description)}</p>
+            ${expand?`<p class="desc">${replaceNewline(loc.description)}</p>`:""}
+          </div>
         </div>
         ${expand?"":`<button type="button" id="mobile-expand" style="align-self:center;" class="btn btn-secondary show-mobile" onclick=mobileExpand(${idx})>Details</button>`}
       </div>`;
