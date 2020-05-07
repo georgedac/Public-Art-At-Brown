@@ -94,7 +94,7 @@ function mobileExpand(idx){
   document.getElementById('infowindow').style.minHeight = "100%";
 
   bodyScrollLock.enableBodyScroll(document.getElementById('brand'));
-  bodyScrollLock.disableBodyScroll(document.getElementById('infowindow'));
+  bodyScrollLock.disableBodyScroll(document.getElementById('locWindow'));
 }
 
 function mobileClose(){
@@ -103,7 +103,7 @@ function mobileClose(){
   document.getElementById('infowindow').style.background = "transparent";
   document.getElementById('infowindow').style.opacity = "0";
   document.getElementById('infowindow').style.minHeight = "0";
-  bodyScrollLock.enableBodyScroll(document.getElementById('infowindow'));
+  bodyScrollLock.enableBodyScroll(document.getElementById('locWindow'));
   bodyScrollLock.disableBodyScroll(document.getElementById('brand'));
 }
 
