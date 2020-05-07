@@ -62,9 +62,9 @@ function windowContent(idx, expand=false) {
     
   </div>
   `;
-  return `<div id="locWindow" class="infowindow">
-        <div class="hide-mobile">${carousel}</div>
-        ${(loc.files.length > 0)?(expand ? carousel: `<img class="w-100 show-mobile" alt="${loc.title}" src=${loc.files[0].url}>`):""}
+  return `<div class="hide-mobile">${carousel}</div>
+  ${(loc.files.length > 0)?(expand ? carousel: `<img class="w-100 show-mobile" alt="${loc.title}" src=${loc.files[0].url}>`):""}
+  <div id="locWindow" class="infowindow">
         <div ${expand?`class="mobile-pad"`:""}>
           <h1 class="title">${loc.title}</h1>
           <div>
