@@ -133,8 +133,8 @@ function initializeLandmarks() {
           map: map});
         marker.addListener('click', function() {
           infowindow.setContent(windowContent(idx));
-          bodyScrollLock.disableBodyScroll(document.getElementById('locWindow'));
           infowindow.open(map, marker);
+          bodyScrollLock.disableBodyScroll(document.getElementById('locWindow'));
         });
         return marker;
       })
