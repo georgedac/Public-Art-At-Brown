@@ -9,6 +9,7 @@ const passport = require('passport');
 const LocalStrategy = require('passport-local').Strategy;
 const expressSession = require('express-session');
 const ensureLogin = require('connect-ensure-login');
+const helmet = require('helmet');
 
 // import handlers
 const dbHandler = require('./controllers/db.js');
@@ -30,6 +31,8 @@ cloudinary.config({
 const app = express();
 const port = process.env.PORT || 8080;
 
+app.use(helmet());
+app.disable('x-powered-by')
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cookieParser());
