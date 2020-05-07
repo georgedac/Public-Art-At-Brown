@@ -92,6 +92,8 @@ function mobileExpand(idx){
   document.getElementById('infowindow').style.background = "white";
   document.getElementById('infowindow').style.opacity = "1";
   document.getElementById('infowindow').style.minHeight = "100%";
+
+  bodyScrollLock.enableBodyScroll(document.getElementById('brand'));
   bodyScrollLock.disableBodyScroll(document.getElementById('infowindow'));
 }
 
@@ -102,6 +104,7 @@ function mobileClose(){
   document.getElementById('infowindow').style.opacity = "0";
   document.getElementById('infowindow').style.minHeight = "0";
   bodyScrollLock.enableBodyScroll(document.getElementById('infowindow'));
+  bodyScrollLock.disableBodyScroll(document.getElementById('brand'));
 }
 
 function haversine_distance(mk1, pos) {
@@ -134,7 +137,7 @@ function initializeLandmarks() {
         marker.addListener('click', function() {
           infowindow.setContent(windowContent(idx));
           infowindow.open(map, marker);
-          bodyScrollLock.disableBodyScroll(document.getElementById('locWindow'));
+          // bodyScrollLock.disableBodyScroll(document.getElementById('locWindow'));
         });
         return marker;
       })
