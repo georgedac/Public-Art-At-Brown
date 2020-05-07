@@ -96,7 +96,7 @@ function mobileExpand(idx){
 }
 
 function mobileClose(){
-  bodyScrollLock.disableBodyScroll(document.getElementById('carousel'));
+  bodyScrollLock.enableBodyScroll(document.getElementById('carousel'));
   bodyScrollLock.enableBodyScroll(document.getElementById('locWindow'));
   document.getElementById('infowindow').innerHTML = "";
   document.getElementById('infowindow').style.background = "transparent";
