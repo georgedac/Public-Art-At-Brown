@@ -54,8 +54,8 @@ function getCarousel(idx) {
       ${loc.files.map((file,idx) => 
         `<div class="carousel-item ${(idx==0)?"active":""}">
           ${(file.is360 ?
-            `<iframe class="size-img" src=https://storage.googleapis.com/vrview/2.0/embed?image=${file.url}></iframe>`:
-            `<img class="size-img" src="${file.url}">`)}
+            `<iframe class="size-img" title="images of this artwork" src=https://storage.googleapis.com/vrview/2.0/embed?image=${file.url}></iframe>`:
+            `<img class="size-img" src="${file.url}" alt="${loc.title}">`)}
         </div>`
         )}
     </div>

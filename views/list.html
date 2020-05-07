@@ -50,10 +50,13 @@
       </div>
     </nav>
     <div id="listView" class="listView">
-      <div class="searchWrapper">
+      <form role="search" class="searchWrapper">
+        <label for="mainSearch">
+          <span class="sr-only">Search</span>
+        </label>
         <input id="mainSearch" type="text" placeholder="Search names, artists, addresses...">
-        <img src="images/search.png" />
-      </div>
+        <img src="images/search.png" alt="use the searchbar to filter through the artwork." />
+      </form>
     </div>
   </div>
   <script src="js/list.js"></script>

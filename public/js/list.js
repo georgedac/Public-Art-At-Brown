@@ -55,8 +55,8 @@ function windowContent(idx, expand=false) {
       ${loc.files.map((file,idx) => 
         `<div class="carousel-item ${(idx==0)?"active":""}">
           ${(file.is360 ?
-            `<iframe class="size-img" src=https://storage.googleapis.com/vrview/2.0/embed?image=${file.url}></iframe>`:
-            `<img class="size-img" src="${file.url}">`)}
+            `<iframe class="size-img" title="images of this artwork" src=https://storage.googleapis.com/vrview/2.0/embed?image=${file.url}></iframe>`:
+            `<img class="size-img" src="${file.url}" alt="${loc.title}">`)}
         </div>`
         )}
     </div>
@@ -72,7 +72,7 @@ function windowContent(idx, expand=false) {
   `;
   return `<div class="infowindow listItem ${expand?"mobile-pad":""}">
         <div class="hide-mobile">${carousel}</div>
-        ${(loc.files.length > 0)?(expand ? carousel: `<img class="w-100 show-mobile" src=${loc.files[0].url}>`):""}
+        ${(loc.files.length > 0)?(expand ? carousel: `<img class="w-100 show-mobile" alt="${loc.title}" src=${loc.files[0].url}>`):""}
         <h1 class="title">${loc.title}</h1>
         <div>
           <p class="artist">Artist: ${loc.artists}</p>
