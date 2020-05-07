@@ -99,11 +99,11 @@ function mobileExpand(idx){
 
 function mobileClose(){
   infowindow.close();
+  bodyScrollLock.enableBodyScroll(document.getElementById('locWindow'));
   document.getElementById('infowindow').innerHTML = "";
   document.getElementById('infowindow').style.background = "transparent";
   document.getElementById('infowindow').style.opacity = "0";
   document.getElementById('infowindow').style.minHeight = "0";
-  bodyScrollLock.enableBodyScroll(document.getElementById('locWindow'));
   bodyScrollLock.disableBodyScroll(document.getElementById('brand'));
 }
 
