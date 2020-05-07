@@ -62,9 +62,11 @@ function windowContent(idx, expand=false) {
     
   </div>
   `;
-  return `<div class="hide-mobile">${carousel}</div>
-  ${(loc.files.length > 0)?(expand ? carousel: `<img class="w-100 show-mobile" alt="${loc.title}" src=${loc.files[0].url}>`):""}
-  <div id="locWindow" class="infowindow">
+  return `<div class="unique-carousel">
+    <div class="hide-mobile">${carousel}</div>
+    ${(loc.files.length > 0)?(expand ? carousel: `<img class="w-100 show-mobile" alt="${loc.title}" src=${loc.files[0].url}>`):""}
+    </div>
+    <div id="locWindow" class="infowindow">
         <div ${expand?`class="mobile-pad"`:""}>
           <h1 class="title">${loc.title}</h1>
           <div>
@@ -92,12 +94,12 @@ function mobileExpand(idx){
 
   bodyScrollLock.enableBodyScroll(document.getElementById('brand'));
   bodyScrollLock.disableBodyScroll(document.getElementById('locWindow'));
-  bodyScrollLock.disableBodyScroll(document.getElementById('carousel'));
+  bodyScrollLock.disableBodyScroll(document.getElementById('unique-carousel'));
 }
 
 function mobileClose(){
   bodyScrollLock.enableBodyScroll(document.getElementById('locWindow'));
-  bodyScrollLock.disableBodyScroll(document.getElementById('carousel'));
+  bodyScrollLock.disableBodyScroll(document.getElementById('unique-carousel'));
   document.getElementById('infowindow').innerHTML = "";
   document.getElementById('infowindow').style.background = "transparent";
   document.getElementById('infowindow').style.opacity = "0";
