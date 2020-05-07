@@ -82,6 +82,7 @@ function windowContent(idx, expand=false) {
 }
 
 function mobileExpand(idx){
+  infowindow.close();
   let content = `
   <nav class="navbar navbar-expand-lg navbar-dark" style="background-color: #C00404;">
     <button type="button" id="mobile-close" style="color: white;font-weight:bold;" onclick=mobileClose()>Close</button>
@@ -94,12 +95,11 @@ function mobileExpand(idx){
   document.getElementById('infowindow').style.minHeight = "100%";
 
   bodyScrollLock.enableBodyScroll(document.getElementById('brand'));
-  bodyScrollLock.disableBodyScroll(document.getElementById('infowindow'));
+  bodyScrollLock.disableBodyScroll(document.getElementById('locWindow'));
 }
 
 function mobileClose(){
-  infowindow.close();
-  bodyScrollLock.enableBodyScroll(document.getElementById('infowindow'));
+  bodyScrollLock.enableBodyScroll(document.getElementById('locWindow'));
   document.getElementById('infowindow').innerHTML = "";
   document.getElementById('infowindow').style.background = "transparent";
   document.getElementById('infowindow').style.opacity = "0";
