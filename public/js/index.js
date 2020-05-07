@@ -62,7 +62,7 @@ function windowContent(idx, expand=false) {
     
   </div>
   `;
-  return `<div class="unique-carousel">
+  return `<div id="unique-carousel">
     <div class="hide-mobile">${carousel}</div>
     ${(loc.files.length > 0)?(expand ? carousel: `<img class="w-100 show-mobile" alt="${loc.title}" src=${loc.files[0].url}>`):""}
     </div>
