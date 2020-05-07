@@ -93,13 +93,13 @@ function mobileExpand(idx){
   document.getElementById('infowindow').style.minHeight = "100%";
 
   bodyScrollLock.enableBodyScroll(document.getElementById('brand'));
-  bodyScrollLock.disableBodyScroll(document.getElementById('locWindow'));
-  bodyScrollLock.disableBodyScroll(document.getElementById('unique-carousel'));
+  // bodyScrollLock.disableBodyScroll(document.getElementById('locWindow'));
+  // bodyScrollLock.disableBodyScroll(document.getElementById('unique-carousel'));
 }
 
 function mobileClose(){
-  bodyScrollLock.enableBodyScroll(document.getElementById('locWindow'));
-  bodyScrollLock.disableBodyScroll(document.getElementById('unique-carousel'));
+  // bodyScrollLock.enableBodyScroll(document.getElementById('locWindow'));
+  // bodyScrollLock.disableBodyScroll(document.getElementById('unique-carousel'));
   document.getElementById('infowindow').innerHTML = "";
   document.getElementById('infowindow').style.background = "transparent";
   document.getElementById('infowindow').style.opacity = "0";
