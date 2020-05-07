@@ -92,10 +92,12 @@ function mobileExpand(idx){
 
   bodyScrollLock.enableBodyScroll(document.getElementById('brand'));
   bodyScrollLock.disableBodyScroll(document.getElementById('locWindow'));
+  bodyScrollLock.disableBodyScroll(document.getElementById('carousel'));
 }
 
 function mobileClose(){
   bodyScrollLock.enableBodyScroll(document.getElementById('locWindow'));
+  bodyScrollLock.disableBodyScroll(document.getElementById('carousel'));
   document.getElementById('infowindow').innerHTML = "";
   document.getElementById('infowindow').style.background = "transparent";
   document.getElementById('infowindow').style.opacity = "0";
