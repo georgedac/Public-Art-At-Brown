@@ -224,10 +224,6 @@ h1 {
         
     }
 
-    button {
-        -webkit-appearance: none;
-    }
-
     /* change searchbar, sidebar, admin popup */
 
     .square-img{
@@ -247,9 +243,11 @@ h1 {
         padding: 10vw;
     }
     
-    /*#mobile-close{
-        left: 0;
-    }*/
+    #mobile-close{
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+    }
 
     #brand {
         align-self: center;
