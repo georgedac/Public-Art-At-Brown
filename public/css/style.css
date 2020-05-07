@@ -219,15 +219,13 @@ h1 {
     z-index: 100;
 }
 
-input {
-    -webkit-appearance: none;
-    -moz-appearance: none;
-    appearance: none;
-}
-
 @media only screen and (max-width: 600px) {
     .infowindow {
         
+    }
+
+    button {
+        -webkit-appearance: none;
     }
 
     /* change searchbar, sidebar, admin popup */
