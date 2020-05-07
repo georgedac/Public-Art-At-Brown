@@ -265,6 +265,7 @@ function initMap() {
   // put markers on map
   initializeLandmarks();
 
-  // make scrolling on mobile happy
-  bodyScrollLock.disableBodyScroll(document.getElementById('brand'));
+  
 }
+// make scrolling on mobile happy
+bodyScrollLock.disableBodyScroll(document.getElementById('brand'));
