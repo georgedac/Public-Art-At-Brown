@@ -115,6 +115,7 @@ h1 {
 #carousel{
     background-color: white;
     width: 100%;
+    max-height: 200px;
     overflow: scroll;
     flex-wrap: nowrap;
     display: flex;
