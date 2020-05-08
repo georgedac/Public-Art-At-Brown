@@ -198,8 +198,10 @@ function onEdit(idx) {
       console.log(data['new_files']);
       Array.prototype.push.apply(locs[idx].files, data['new_files']);
       // TODO force refresh??
+      if(infowindow.getMap()) {
+        locationWindow(idx);
+      }
     })
-  locationWindow(idx);
 }
 
 function onCreate(idx) {
@@ -250,6 +252,7 @@ function onCreate(idx) {
       console.log(data['new_files']);
       Array.prototype.push.apply(locs[idx].files, data['new_files']);
       // TODO force refresh??
+      locationWindow(idx);
     })
 }
 
@@ -264,8 +267,7 @@ function moveMarker(movingID, idx) {
     map: map
   });
   marker.addListener('click', function() {
-    infowindow.setContent(locationWindow(idx));
-    infowindow.open(map, marker);
+    locationWindow(idx);
   });
   removeMarker(idx);
   removeMarker(movingID);
@@ -281,7 +283,6 @@ function moveMarker(movingID, idx) {
   })
     .then(response => response.json())
     .then(data => {
-      console.log("got data back from location edit!");
     })
 }
 
@@ -415,6 +416,7 @@ function initMap() {
     <button type="button" onclick="createWindow(${idx})">Add New</button>
     `);
       let onClickContent = `
+    <button type="button" onclick="createWindow(${idx})">Add New</button>
     <button type="button" onclick="removeMarker(${idx})">Remove</button>
     `;
       markers[idx].addListener('click', function() {

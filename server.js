@@ -101,7 +101,7 @@ app.get('/logout', function(req, res){
     res.redirect('/');
 });
 app.get('/admin', 
-ensureLogin.ensureLoggedIn(),
+ensureLogin.ensureLoggedIn('/'),
 function(req, res) {
     res.sendFile(path.join(__dirname + '/views/admin-index.html'));
 });
