@@ -415,6 +415,7 @@ function initMap() {
     <button type="button" onclick="createWindow(${idx})">Add New</button>
     `);
       let onClickContent = `
+    <button type="button" onclick="createWindow(${idx})">Add New</button>
     <button type="button" onclick="removeMarker(${idx})">Remove</button>
     `;
       markers[idx].addListener('click', function() {
