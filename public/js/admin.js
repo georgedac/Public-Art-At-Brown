@@ -75,7 +75,7 @@ function locationWindow(idx) {
           <p class="artist">Artist(s): ${loc.artists}</p>
           <p class="desc">${replaceNewline(loc.description)}</p>
         </div>
-        <button type="button" onclick="editWindow(${idx})">Edit</button>
+        <button type="button" class="btn btn-primary" onclick="editWindow(${idx})">Edit</button>
       </div>`;
   infowindow.setContent(content);
   infowindow.open(map, markers[idx]);
@@ -87,18 +87,26 @@ function editWindow(idx) {
   let content = `<div class="infowindow">
         ${carousel}
         <form id="editForm">
-          <label for="formFiles">Upload (hold CTRL or SHIFT to select multiple):</label><br>
-          <input type="file" id="formFiles" name="files" multiple><br><br>
-          <label for="formTitle">Title:</label><br>
-          <input type="text" id="formTitle" name="title" value="${loc.title}"><br>
-          <label for="formArtist">Artist(s):</label><br>
-          <input type="text" id="formArtist" name="artists" value="${loc.artists}"><br>
-          <label for="formDescription">Description:</label><br>
-          <textarea id="formDescription" name="description" style="width:562px;height:100px;">${loc.description}</textarea><br>
-          <button type="button" onclick=locationWindow(${idx})>Cancel</button>
-          <button type="button" onclick="onDelete(${idx})">Delete</button>
-          <button type="button" onclick="onMove(${idx})">Move</button>
-          <button type="button" onclick="onEdit(${idx})">Save</button>
+          <div class="form-group">
+            <label for="formFiles">Upload (hold CTRL or SHIFT to select multiple):</label>
+            <input type="file" class="form-control" id="formFiles" name="files" multiple>
+          </div>
+          <div class="form-group">
+            <label for="formTitle">Title:</label>
+            <input type="text" class="form-control" id="formTitle" name="title" value="${loc.title}">
+          </div>
+          <div class="form-group">
+            <label for="formArtist">Artist(s):</label>
+            <input type="text" class="form-control" id="formArtist" name="artists" value="${loc.artists}">
+          </div>
+          <div class="form-group">
+            <label for="formDescription">Description:</label>
+            <textarea id="formDescription" class="form-control" name="description" style="width:562px;height:100px;">${loc.description}</textarea>
+          </div>
+          <button type="button" class="btn btn-primary" onclick=locationWindow(${idx})>Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="onDelete(${idx})">Delete</button>
+          <button type="button" class="btn btn-primary" onclick="onMove(${idx})">Move</button>
+          <button type="button" class="btn btn-primary" onclick="onEdit(${idx})">Save</button>
         </form>
       </div>`;
   infowindow.setContent(content);
@@ -112,18 +120,25 @@ function createWindow(idx) {
   let carousel = getCarousel(idx);
   let content = `<div class="infowindow">
         ${carousel}
-        <button type="button">Upload</button>
         <form id="createForm">
-          <label for="cFormFiles">Upload (hold CTRL or SHIFT to select multiple):</label><br>
-          <input type="file" id="cFormFiles" name="files" multiple><br><br>
-          <label for="cFormTitle">Title:</label><br>
-          <input type="text" id="cFormTitle" name="title" value="${loc.title}"><br>
-          <label for="cFormArtist">Artist:</label><br>
-          <input type="text" id="cFormArtist" name="artists" value="${loc.artist}"><br>
-          <label for="cFormDescription">Description:</label><br>
-          <textarea id="cFormDescription" name="description" style="width:562px;height:100px;">${loc.description}</textarea><br>
-          <button type="button" onclick="removeMarker(${idx})">Cancel</button>
-          <button type="button" onclick="onCreate(${idx})">Save</button>
+          <div class="form-group">
+            <label for="cFormFiles">Upload (hold CTRL or SHIFT to select multiple):</label>
+            <input type="file" class="form-control" id="cFormFiles" name="files" multiple>
+          </div>
+          <div class="form-group">
+            <label for="cFormTitle">Title:</label>
+            <input type="text" class="form-control" id="cFormTitle" name="title" value="${loc.title}">
+          </div>
+          <div class="form-group">
+            <label for="cFormArtist">Artist:</label>
+            <input type="text" class="form-control" id="cFormArtist" name="artists" value="${loc.artist}">
+          </div>
+          <div class="form-group">
+            <label for="cFormDescription">Description:</label>
+            <textarea id="cFormDescription" class="form-control" name="description" style="width:562px;height:100px;">${loc.description}</textarea>
+          </div>
+          <button type="button" class="btn btn-primary" onclick="removeMarker(${idx})">Cancel</button>
+          <button type="button" class="btn btn-primary" onclick="onCreate(${idx})">Save</button>
         </form>
       </div>`;
   infowindow.setContent(content);

@@ -93,6 +93,7 @@ function mobileExpand(idx){
   </nav>
   ${windowContent(idx, true)}
   `;
+  bodyScrollLock.enableBodyScroll(document.getElementById('listView'));
   document.getElementById('markerWrapper' + idx).innerHTML = content;
   document.getElementById('markerWrapper' + idx).style.background = "white";
   document.getElementById('markerWrapper' + idx).style.opacity = "1";
@@ -110,6 +111,7 @@ function mobileClose(idx){
   document.getElementById('markerWrapper' + idx).style.position = "relative"; 
   document.getElementById('markerWrapper' + idx).style.zIndex= "1";
   bodyScrollLock.enableBodyScroll(document.getElementById('markerWrapper' + idx));
+  bodyScrollLock.disableBodyScroll(document.getElementById('listView'));
 }
 
 fetch('/landmarks')
@@ -125,3 +127,5 @@ fetch('/landmarks')
     })
     return markers
 });
+
+bodyScrollLock.disableBodyScroll(document.getElementById('listView'));
