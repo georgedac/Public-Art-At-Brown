@@ -12,18 +12,35 @@ div {
 }
 
 h1 {
-    font-family: 'Lato', 'Times New Roman';
+    font-family: 'Alatsi', 'Lato', 'Times New Roman';
+    font-size: 32px;
+    text-align: center;
+    padding: 10px;
+    font-weight: 500;
 }
 
 #sidebar {
-    padding: 10px;
-    min-width: 250px;
-    height: 100vh;
-    border-right: 3px solid #ED1C24;
+    padding: 10px 0 0 0;
+    min-width: 230px;
+    min-height: 100vh;
     box-sizing: border-box;
-    text-align: center;
     background-color: #3F4354;
-    color: white;
+    color: #EFEFEF;
+    box-shadow: 3px 0 12px #C6CDD2;
+    position: relative;
+    z-index: 1;
+}
+
+#sidebar a:not(.active) {
+    text-decoration: none;
+    color: #000000;
+}
+
+#sidebar img {
+    width: 200px;
+    position: fixed;
+    bottom: 0;
+    margin-left: 10px;
 }
 
 #main {
@@ -36,25 +53,27 @@ h1 {
 }
 
 #menu {
-    margin: 70px 5% 0 5%;
+    margin: 50px 0 30px 5%;
     padding: 0;
     list-style-type: none;
+    text-align: center;
 }
 
 #menu li {
     padding: 5px 0;
     font-size: min(max(16px, 4vw), 18px);
+    background-color: #EFEFEF;
+    border-left: 4px solid #EFEFEF;
 }
 
 #menu li:hover {
-    transition: background-color 0.3s ease-out;
-    background-color:#AAABBB;
     text-decoration: none;
+    border-left: 4px solid #C00404;
 }
 
 #menu li.active {
-    color: #ED1C24;
-    background-color: #AAABBB;
+    border-left: 4px solid #C00404;
+
 }
 
 #menu a {
