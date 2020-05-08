@@ -40,6 +40,15 @@ function replaceNewline(input) {
       });
   }
   document.getElementById("mainSearch").addEventListener("input", handleSearch)
+
+  function toggleForm() {
+    let form = document.getElementById("signinForm");
+    if (form.style.left == "-300px" || form.style.left == "") {
+      form.style.left = "0px";
+    } else {
+      form.style.left = "-300px";
+    }
+  }
   // end helper functions (we should probably export these into a separate js doc)
 
 function windowContent(idx, expand=false) {
