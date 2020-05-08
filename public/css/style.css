@@ -28,6 +28,14 @@ h1 {
     font-weight: 500;
 }
 
+h2 {
+    font-family: 'Alatsi', 'Lato', 'Times New Roman';
+    font-size: 26px;
+    padding: 10px;
+    font-weight: 500;    
+    margin-left: 70px;
+}
+
 #sidebar {
     padding: 10px 0 0 0;
     min-width: 230px;
@@ -144,6 +152,63 @@ h1 {
     z-index: 100;
     position: absolute;
     top: 0;
+}
+
+/*These are for the about page styling*/
+.leftParagraph {
+    margin: 0 500px 40px 70px;
+    font-size: 20px;
+    text-align: justify;
+}
+
+.rightParagraph {
+    margin: 0 70px 40px 500px;
+    font-size: 20px;
+    text-align: justify;
+}
+
+.leftImg {
+    float: left;
+    margin: 0 0 0 150px;
+    border: 2px solid #4E3629;
+    max-height: 300px;
+}
+
+.rightImg {
+    float: right;
+    margin: 0 150px 0 0;
+    border: 2px solid #4E3629;
+    max-height: 350px;
+}
+
+@media only screen and (max-width: 1100px) {
+    .rightImg {
+        float: none;
+        position: relative;
+        margin: auto;
+    }
+    .leftImg {
+        float: none;
+        position: relative;
+        margin: auto;
+    }
+    .leftParagraph {
+        margin: 20px;
+        font-size: 20px;
+        text-align: center;
+    }
+    
+    .rightParagraph {
+        margin: 20px;
+        font-size: 20px;
+        text-align: center;
+    }
+}
+
+
+
+.bigTitle {
+    font-size: 40px;
 }
 
 /*These are to style the scrollbars*/
