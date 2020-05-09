@@ -45,11 +45,18 @@ function createLandmark(request, response){
     delete new_lm.lat;
     delete new_lm.lng;
     console.log(request.files);
+    if(!request.files){request.files = [];}
     new_lm.files = request.files.map(file => ({
         url: file.url,
         id: file.public_id,
-        is360: false
+        listID: genId(),
+        fileType: "image"
     }))
+    if(!new_lm.labels){new_lm.labels = [];}
+    new_lm.labels.forEach((label, idx) => {
+        new_lm.files[idx].label = label;
+    });
+    delete new_lm.labels;
     new_lm.id = id;
     console.log("create request: " + id);
     console.log(new_lm);
@@ -62,7 +69,7 @@ function createLandmark(request, response){
     // response.redirect('/' + id)
     response.json({
         'id': id,
-        'new_files': new_lm.files
+        'updated': new_lm
     });
 }
 
@@ -80,24 +87,37 @@ function editLandmark(request, response){
     if(!request.files){request.files = [];}
     console.log(request.files);
     let new_files = request.files.map(file => ({
-        url: file.url, // might need to be string?
+        url: file.url,
         id: file.public_id,
-        is360: false
+        listID: genId(),
+        fileType: "image"
     }));
+    if(!new_lm.labels){new_lm.labels = [];}
+    new_lm.labels.forEach((label, idx) => {
+        new_lm.files[idx].label = label;
+    });
+    delete new_lm.labels;
     // TODO need to be able to remove previous files
+    const deleteFiles = (new_lm.deleteFiles)?new_lm.deleteFiles:[];
+    delete new_lm.deleteFiles;
 
     console.log("edit request: " + id);
     console.log(new_lm);
     
-    Landmark.updateOne({"id": id}, {
-        $push: { files: { $each: new_files } }, // might need to be string?
+    Landmark.findOneAndUpdate({"id": id}, {
+        $push: { files: { $each: new_files } }, 
+        $pull: { files: { $each: new_files } }, 
+        $pull: { files: { $each: deleteFiles } }, 
         $set: new_lm,
-      }, { runValidators: true }, function(err, data) {
+      }, { 
+          runValidators: true,
+          new: true
+     }, function(err, data) {
         if (err) return console.error(err);
         console.log(data);
         console.log("updated a thing");
       });
-    response.json({'new_files': new_files}); // ....????
+    response.json({'updated': data}); // ....????
 }
 
 function deleteLandmark(request, response){

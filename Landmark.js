@@ -32,7 +32,13 @@ const landmarkSchema = new mongoose.Schema({
     files: [{
         url: String,
         id: String,
-        is360: Boolean
+        listID: String,
+        fileType: {
+            type: String,
+            enum: ['image', 'video', 'audio', 'vr'],
+            default: 'image'
+        },
+        label: String
     }]
 });
     
