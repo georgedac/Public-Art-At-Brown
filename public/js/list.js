@@ -69,6 +69,7 @@ function mobileExpand(idx){
   document.getElementById('markerWrapper' + idx).style.background = "white";
   document.getElementById('markerWrapper' + idx).style.opacity = "1";
   document.getElementById('markerWrapper' + idx).style.minHeight = "100vh";
+  document.getElementById('markerWrapper' + idx).style.minWidth = "100vw";
   document.getElementById('markerWrapper' + idx).style.position = "fixed"; 
   document.getElementById('markerWrapper' + idx).style.top = "0";
   document.getElementById('markerWrapper' + idx).style.left = "0";
@@ -83,7 +84,7 @@ function mobileClose(idx){
   document.getElementById('markerWrapper' + idx).style.minHeight = "";
   document.getElementById('markerWrapper' + idx).style.position = "relative"; 
   document.getElementById('markerWrapper' + idx).style.zIndex= "1";
-  document.getElementById('markerWrapper' + idx).style.minWidth = "0";
+  document.getElementById('markerWrapper' + idx).style.minWidth = "";
   /*bodyScrollLock.enableBodyScroll(document.getElementById('markerWrapper' + idx));
   bodyScrollLock.disableBodyScroll(document.getElementById('brand'));*/
 }
