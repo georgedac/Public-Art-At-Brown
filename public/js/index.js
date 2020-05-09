@@ -99,19 +99,19 @@ function mobileExpand(idx){
   document.getElementById('infowindow').style.opacity = "1";
   document.getElementById('infowindow').style.minHeight = "100%";
 
-  bodyScrollLock.enableBodyScroll(document.getElementById('brand'));
+  /*bodyScrollLock.enableBodyScroll(document.getElementById('brand'));
   bodyScrollLock.disableBodyScroll(document.getElementById('carousel'));
-  bodyScrollLock.disableBodyScroll(document.getElementById('locWindow'));
+  bodyScrollLock.disableBodyScroll(document.getElementById('locWindow'));*/
 }
 
 function mobileClose(){
-  bodyScrollLock.enableBodyScroll(document.getElementById('carousel'));
-  bodyScrollLock.enableBodyScroll(document.getElementById('locWindow'));
+  /*bodyScrollLock.enableBodyScroll(document.getElementById('carousel'));
+  bodyScrollLock.enableBodyScroll(document.getElementById('locWindow'));*/
   document.getElementById('infowindow').innerHTML = "";
   document.getElementById('infowindow').style.background = "transparent";
   document.getElementById('infowindow').style.opacity = "0";
   document.getElementById('infowindow').style.minHeight = "0";
-  bodyScrollLock.disableBodyScroll(document.getElementById('brand'));
+  //bodyScrollLock.disableBodyScroll(document.getElementById('brand'));
 }
 
 function haversine_distance(mk1, pos) {
@@ -278,4 +278,4 @@ function initMap() {
   
 }
 // make scrolling on mobile happy
-bodyScrollLock.disableBodyScroll(document.getElementById('brand'));
+// bodyScrollLock.disableBodyScroll(document.getElementById('brand'));

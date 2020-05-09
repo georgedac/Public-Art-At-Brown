@@ -33,7 +33,7 @@
   // Older browsers don't support event options, feature detect it.
 
   // Adopted and modified solution from Bohdan Didukh (2017)
-  // https://stackoverflow.com/questions/41594997/ios-10-safari-prevent-scrolling-behind-a-fixed-overlay-and-maintain-scroll-posi
+  // https://stack.com/questions/41594997/ios-10-safari-prevent-scrolling-behind-a-fixed-overlay-and-maintain-scroll-posi
 
   var hasPassiveEvents = false;
   if (typeof window !== 'undefined') {
@@ -53,7 +53,7 @@
   var locks = [];
   var documentListenerAdded = false;
   var initialClientY = -1;
-  var previousBodyOverflowSetting = void 0;
+  var previousBodySetting = void 0;
   var previousBodyPaddingRight = void 0;
 
   // returns true if `el` should be allowed to receive touchmove events.
@@ -86,8 +86,8 @@
     return false;
   };
 
-  var setOverflowHidden = function setOverflowHidden(options) {
-    // Setting overflow on body/documentElement synchronously in Desktop Safari slows down
+  var setHidden = function setHidden(options) {
+    // Setting  on body/documentElement synchronously in Desktop Safari slows down
     // the responsiveness for some reason. Setting within a setTimeout fixes this.
     setTimeout(function () {
       // If previousBodyPaddingRight is already set, don't set it again.
@@ -101,32 +101,32 @@
         }
       }
 
-      // If previousBodyOverflowSetting is already set, don't set it again.
-      if (previousBodyOverflowSetting === undefined) {
-        previousBodyOverflowSetting = document.body.style.overflow;
-        document.body.style.overflow = 'hidden';
+      // If previousBodySetting is already set, don't set it again.
+      if (previousBodySetting === undefined) {
+        previousBodySetting = document.body.style.;
+        document.body.style. = 'hidden';
       }
     });
   };
 
-  var restoreOverflowSetting = function restoreOverflowSetting() {
-    // Setting overflow on body/documentElement synchronously in Desktop Safari slows down
+  var restoreSetting = function restoreSetting() {
+    // Setting  on body/documentElement synchronously in Desktop Safari slows down
     // the responsiveness for some reason. Setting within a setTimeout fixes this.
     setTimeout(function () {
       if (previousBodyPaddingRight !== undefined) {
         document.body.style.paddingRight = previousBodyPaddingRight;
 
-        // Restore previousBodyPaddingRight to undefined so setOverflowHidden knows it
+        // Restore previousBodyPaddingRight to undefined so setHidden knows it
         // can be set again.
         previousBodyPaddingRight = undefined;
       }
 
-      if (previousBodyOverflowSetting !== undefined) {
-        document.body.style.overflow = previousBodyOverflowSetting;
+      if (previousBodySetting !== undefined) {
+        document.body.style. = previousBodySetting;
 
-        // Restore previousBodyOverflowSetting to undefined
-        // so setOverflowHidden knows it can be set again.
-        previousBodyOverflowSetting = undefined;
+        // Restore previousBodySetting to undefined
+        // so setHidden knows it can be set again.
+        previousBodySetting = undefined;
       }
     });
   };
@@ -196,7 +196,7 @@
         }
       }
     } else {
-      setOverflowHidden(options);
+      setHidden(options);
       var _lock = {
         targetElement: targetElement,
         options: options || {}
@@ -224,7 +224,7 @@
       // Reset initial clientY.
       initialClientY = -1;
     } else {
-      restoreOverflowSetting();
+      restoreSetting();
       locks = [];
     }
   };
@@ -254,7 +254,7 @@
         return lock.targetElement !== targetElement;
       });
       if (!locks.length) {
-        restoreOverflowSetting();
+        restoreSetting();
       }
     }
   };
