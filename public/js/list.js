@@ -80,7 +80,7 @@ function mobileExpand(idx){
   
 function mobileClose(idx){
   document.getElementById('markerWrapper' + idx).innerHTML = windowContent(idx);
-  document.getElementById('markerWrapper' + idx).style.minHeight = "0";
+  document.getElementById('markerWrapper' + idx).style.minHeight = "";
   document.getElementById('markerWrapper' + idx).style.position = "relative"; 
   document.getElementById('markerWrapper' + idx).style.zIndex= "1";
   document.getElementById('markerWrapper' + idx).style.minWidth = "0";
