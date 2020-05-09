@@ -73,11 +73,6 @@ app.use(expressSession({ secret: 'blueno', resave: false, saveUninitialized: fal
 app.use(passport.initialize());
 app.use(passport.session());
 
-// // If you choose not to use handlebars as template engine, you can safely delete the following part and use your own way to render content
-// // view engine setup
-// app.engine('hbs', hbs({extname: 'hbs', defaultLayout: 'layout', layoutsDir: __dirname + '/views/layouts/'}));
-// app.set('views', path.join(__dirname, 'views'));
-// app.set('view engine', 'hbs');
 
 app.get('/landmarks', dbHandler.getLandmarks);
 app.post('/landmarks', parser.array('files'), dbHandler.createLandmark);
@@ -108,7 +103,5 @@ function(req, res) {
 app.get('/', function(req, res) {
     res.sendFile(path.join(__dirname + '/views/index.html'));
 });
-
-// NOTE: This is the sample server.js code we provided, feel free to change the structures
 
 app.listen(port, () => console.log(`Server listening on http://localhost:${port}`));
