@@ -56,16 +56,16 @@ function windowContent(idx, expand=false) {
   <div id="carousel" class="carousel-custom">
     ${(loc.files.length == 1) ? 
       `<div class="carousel-item-single-custom">
-      ${(loc.files[0].is360 ?
+      ${((loc.files[0].fileType && loc.files[0].fileType != "image") ?
         `<iframe title="images of this artwork" src=https://storage.googleapis.com/vrview/2.0/embed?image=${loc.files[0].url}></iframe>`:
-        `<img src="${loc.files[0].url}" alt="${loc.title}">`)}
+        `<img src="${loc.files[0].url}" alt="${loc.files[0].label? loc.files[0].label:loc.title}" title="${loc.files[0].label? loc.files[0].label:loc.title}">`)}
       </div>`
     : 
     loc.files.map((file,idx) => 
       `<div class="carousel-item-custom ${(idx==0)?"active":""}">
-        ${(file.is360 ?
+        ${((file.fileType && file.fileType != "image") ?
           `<iframe title="images of this artwork" src=https://storage.googleapis.com/vrview/2.0/embed?image=${file.url}></iframe>`:
-          `<img src="${file.url}" alt="${loc.title}">`)}
+          `<img src="${file.url}" alt="${loc.files[idx].label? loc.files[idx].label:loc.title}" title="${loc.files[idx].label? loc.files[idx].label:loc.title}">`)}
       </div>`
       )}
     

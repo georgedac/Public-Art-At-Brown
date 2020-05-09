@@ -52,10 +52,11 @@ function createLandmark(request, response){
         listID: genId(),
         fileType: "image"
     }))
-    if(!new_lm.labels){new_lm.labels = [];}
-    new_lm.labels.forEach((label, idx) => {
-        new_lm.files[idx].label = label;
-    });
+    if(new_lm.labels){
+        JSON.parse(new_lm.labels).forEach((label, idx) => {
+            new_lm.files[idx].label = label;
+        });
+    }
     delete new_lm.labels;
     new_lm.id = id;
     console.log("create request: " + id);
@@ -92,32 +93,52 @@ function editLandmark(request, response){
         listID: genId(),
         fileType: "image"
     }));
-    if(!new_lm.labels){new_lm.labels = [];}
-    new_lm.labels.forEach((label, idx) => {
-        new_lm.files[idx].label = label;
-    });
+    let setLabels = {};
+    if(new_lm.labels){
+        JSON.parse(new_lm.labels).forEach((label, idx) => {
+            setLabels[`files.${idx}.label`] = label;
+        });
+    }
     delete new_lm.labels;
     // TODO need to be able to remove previous files
-    const deleteFiles = (new_lm.deleteFiles)?new_lm.deleteFiles:[];
+    const deleteFiles = (new_lm.deleteFiles)?JSON.parse(new_lm.deleteFiles):[];
     delete new_lm.deleteFiles;
 
     console.log("edit request: " + id);
     console.log(new_lm);
-    
     Landmark.findOneAndUpdate({"id": id}, {
-        $push: { files: { $each: new_files } }, 
-        $pull: { files: { $each: new_files } }, 
-        $pull: { files: { $each: deleteFiles } }, 
-        $set: new_lm,
+        $set: setLabels
       }, { 
           runValidators: true,
           new: true
      }, function(err, data) {
         if (err) return console.error(err);
         console.log(data);
-        console.log("updated a thing");
+        console.log("updated old labels 1/3");
       });
-    response.json({'updated': data}); // ....????
+    Landmark.findOneAndUpdate({"id": id}, {
+        $push: { files: { $each: new_files } }, 
+        $set: new_lm
+      }, { 
+          runValidators: true,
+          new: true
+     }, function(err, data) {
+        if (err) return console.error(err);
+        console.log(data);
+        console.log("updated new files, field changes 2/3");
+      });
+
+    Landmark.findOneAndUpdate({"id": id}, {
+        $pull: { files: { $or: deleteFiles } }
+    }, { 
+        runValidators: true,
+        new: true
+    }, function(err, data) {
+        if (err) return console.error(err);
+        console.log(data);
+        console.log("removed old files 3/3");
+        response.json({'updated': data}); // ....????
+        });
 }
 
 function deleteLandmark(request, response){

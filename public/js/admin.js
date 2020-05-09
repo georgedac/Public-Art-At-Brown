@@ -50,14 +50,14 @@ function getCarousel(idx) {
       `<div class="carousel-item-single-custom">
       ${((loc.files[0].fileType && loc.files[0].fileType != "image") ?
         `<iframe title="images of this artwork" src=https://storage.googleapis.com/vrview/2.0/embed?image=${loc.files[0].url}></iframe>`:
-        `<img src="${loc.files[0].url}" alt="${loc.title}">`)}
+        `<img src="${loc.files[0].url}" alt="${loc.files[0].label? loc.files[0].label:loc.title}" title="${loc.files[0].label? loc.files[0].label:loc.title}">`)}
       </div>`
     : 
     loc.files.map((file,idx) => 
       `<div class="carousel-item-custom ${(idx==0)?"active":""}">
-        ${((loc.files[0].fileType && loc.files[0].fileType != "image") ?
+        ${((file.fileType && file.fileType != "image") ?
           `<iframe title="images of this artwork" src=https://storage.googleapis.com/vrview/2.0/embed?image=${file.url}></iframe>`:
-          `<img src="${file.url}" alt="${loc.title}">`)}
+          `<img src="${file.url}" alt="${loc.files[idx].label? loc.files[idx].label:loc.title}" title="${loc.files[idx].label? loc.files[idx].label:loc.title}">`)}
       </div>`
       )}
     
@@ -81,12 +81,46 @@ function locationWindow(idx) {
   infowindow.open(map, markers[idx]);
 }
 
+function selectFileFunction() {
+  const select = document.getElementById('selectFile');
+  for (var i=0, len=select.options.length; i<len; i++) {
+    opt = select.options[i];
+    document.getElementById(opt.value).style.display = opt.value==select.value? 'block' : 'none';
+  }
+}
+
 function editWindow(idx) {
   let loc = locs[idx];
-  let carousel = getCarousel(idx);
+  let carousel = getCarousel(idx); // shownumbers flag to overlay numbers?
   let content = `<div class="infowindow">
         ${carousel}
         <form id="editForm">
+          <div style="border-style:solid; border-width:thin; padding:10px">
+            <div class="form-group">
+              <label for="selectFile">Select file to edit:</label>
+              <select class="form-control" id="selectFile" name="selectFile" onchange="selectFileFunction()">
+              ${loc.files.map((file,idx) => 
+                `<option value="fileEdit-${idx}">${idx+1}</option>`
+                )}}
+              </select>
+            </div>
+            <div id="fileEdit">
+            ${loc.files.map((file,idx) => 
+              `
+              <div id="fileEdit-${idx}" style=${idx==0? "display: block":"display:none"}>
+                <div class="form-group">
+                  <label for="formLabel-${idx}">Label:</label>
+                  <input type="text" class="form-control" id="formLabel-${idx}" name="formLabel-${idx}" value="${file.label ? file.label : ""}">
+                </div>
+                <div class="form-check">
+                  <input type="checkbox" class="form-check-input" id="formDelete-${idx}" name="formDelete-${idx}" value="delete">
+                  <label class="form-check-label" for="formDelete-${idx}">Delete File</label>
+                </div>
+              </div>
+              `
+              )}
+            </div>
+          </div><br>
           <div class="form-group">
             <label for="formFiles">Upload (hold CTRL or SHIFT to select multiple):</label>
             <input type="file" class="form-control" id="formFiles" name="files" multiple>
@@ -113,6 +147,23 @@ function editWindow(idx) {
   infowindow.open(map, markers[idx]);
 }
 
+function createFileEdit() {
+  const files = document.getElementById('cFormFiles').files;
+  console.log(files);
+  let value = "";
+  for (var idx=0, len=files.length; idx<len; idx++) {
+    value += `
+    <div id="fileEdit-${idx}">
+      <div class="form-group">
+        <label for="formLabel-${idx}">Label for ${files[idx].name}</label>
+        <input type="text" class="form-control" id="formLabel-${idx}" name="formLabel-${idx}" value="">
+      </div>
+    </div>
+    `;
+  }
+  document.getElementById('fileEdit').innerHTML = value;
+}
+
 function createWindow(idx) {
   showingTempMarker= false;
   locs[idx] = {title: "", artist: "", description: "", files: []};
@@ -121,9 +172,13 @@ function createWindow(idx) {
   let content = `<div class="infowindow">
         ${carousel}
         <form id="createForm">
-          <div class="form-group">
-            <label for="cFormFiles">Upload (hold CTRL or SHIFT to select multiple):</label>
-            <input type="file" class="form-control" id="cFormFiles" name="files" multiple>
+          <div style="border-style:solid; border-width:thin; padding:10px;padding-bottom:0px;margin-bottom:10px">
+            <div class="form-group">
+              <label for="cFormFiles">Upload (hold CTRL or SHIFT to select multiple):</label>
+              <input type="file" class="form-control" id="cFormFiles" name="files" onchange="createFileEdit()" multiple>
+            </div>
+            <div id="fileEdit">
+            </div>
           </div>
           <div class="form-group">
             <label for="cFormTitle">Title:</label>
@@ -175,18 +230,33 @@ function onEdit(idx) {
   // TODO upload (files)
   // TODO allow people to move markers? show current location w/ lng/lat?
   let formData = new FormData(document.getElementById('editForm'));
-  const loc = locs[idx];
-  let message = {
-    'title': document.getElementById('formTitle').value,
-    'artists': document.getElementById('formArtist').value,
-    'description': document.getElementById('formDescription').value
+  for(var pair of formData.entries()) {
+     console.log(pair[0]+ ', '+ pair[1]); 
   }
+  const loc = locs[idx];
+
+  // clean up label/delete selection
+  formData.delete('selectFile');
+  labels = [];
+  deleteFiles = [];
+  loc.files.forEach((file, idx) => {
+    labels[idx] = formData.get(`formLabel-${idx}`);
+    formData.delete(`formLabel-${idx}`);
+    let toDelete = formData.get(`formDelete-${idx}`);
+    if(toDelete && toDelete=="delete") {
+      deleteFiles[idx] = {'_id': file._id};
+      formData.delete(`formDelete-${idx}`);
+    }
+  })
+  formData.append('labels', JSON.stringify(labels));
+  formData.append('deleteFiles', JSON.stringify(deleteFiles));
+
   console.log("requesting edit");
-  console.log(message);
-  locs[idx].title = message.title;
-  locs[idx].artists = message.artists;
-  locs[idx].description = message.description;
-  markers[idx].setTitle(message.title); // might need to refresh
+  for(var pair of formData.entries()) {
+     console.log(pair[0]+ ', '+ pair[1]); 
+  }
+  
+   // might need to refresh
   fetch(`/landmarks/${loc.id}`, {
     method: 'PUT',
     body: formData,
@@ -195,8 +265,9 @@ function onEdit(idx) {
     .then(data => {
       console.log("got data back from edit!");
       // update with new_files
-      console.log(data['new_files']);
-      Array.prototype.push.apply(locs[idx].files, data['new_files']);
+      console.log(data['updated']);
+      locs[idx] = data['updated'];
+      markers[idx].setTitle(locs[idx].title);
       // TODO force refresh??
       if(infowindow.getMap()) {
         locationWindow(idx);
@@ -208,28 +279,24 @@ function onCreate(idx) {
   let formData = new FormData(document.getElementById('createForm'));
   formData.append('lat', markers[idx].getPosition().lat());
   formData.append('lng', markers[idx].getPosition().lng());
-  
-  // update local storage (message is just for reference convenience)
-  let message = {
-    'title': document.getElementById('cFormTitle').value,
-    'artists': document.getElementById('cFormArtist').value,
-    'description': document.getElementById('cFormDescription').value,
-    'location': {
-      'lat': markers[idx].getPosition().lat(),
-      'lng': markers[idx].getPosition().lng() // unclear if these are strings or what
-    },
-    'files': []
+  for(var pair of formData.entries()) {
+     console.log(pair[0]+ ', '+ pair[1]); 
   }
-  locs[idx].title = message.title;
-  locs[idx].artists = message.artists;
-  locs[idx].description = message.description;
-  locs[idx].location = message.location;
-  locs[idx].files = message.files;
+
+  // clean up label/delete selection
+  labels = [];
+  const files = document.getElementById('cFormFiles').files;
+  console.log(files.length);
+  for (var idx=0, len=files.length; idx<len; idx++) {
+    labels[idx] = formData.get(`formLabel-${idx}`);
+    formData.delete(`formLabel-${idx}`);
+  }
+  formData.append('labels', JSON.stringify(labels));
 
   // create non-temporary marker to handle click events
   let marker = new google.maps.Marker({
     position: markers[idx].getPosition(), 
-    title: message.title, 
+    title: document.getElementById('cFormTitle').value, 
     map: map
   });
   marker.addListener('click', function() {
@@ -239,19 +306,17 @@ function onCreate(idx) {
   markers[idx] = marker;
 
   console.log("requesting create");
-  console.log(message);
+  for(var pair of formData.entries()) {
+     console.log(pair[0]+ ', '+ pair[1]); 
+  }
   fetch(`/landmarks`, {
     method: 'POST',
     body: formData,
   })
     .then(response => response.json())
     .then(data => {
-      console.log("got an id back from create! id:" + data.id);
-      locs[idx].id = data.id;
-      // locs[idx].files.push(...data['new_files']);
-      console.log(data['new_files']);
-      Array.prototype.push.apply(locs[idx].files, data['new_files']);
-      // TODO force refresh??
+      console.log(data['updated']);
+      locs[idx] = data['updated'];
       locationWindow(idx);
     })
 }
