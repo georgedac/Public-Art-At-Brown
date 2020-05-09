@@ -64,6 +64,8 @@ function mobileExpand(idx){
   </nav>
   ${windowContent(idx, true)}
   `;
+  const $body = document.querySelector('body');
+  $body.style.overflow = 'hidden';
   /*bodyScrollLock.enableBodyScroll(document.getElementById('brand'));*/
   document.getElementById('markerWrapper' + idx).innerHTML = content;
   document.getElementById('markerWrapper' + idx).style.background = "white";
@@ -89,6 +91,8 @@ function mobileClose(idx){
   document.getElementById('markerWrapper' + idx).style.width = "";
   /*bodyScrollLock.enableBodyScroll(document.getElementById('markerWrapper' + idx));
   bodyScrollLock.disableBodyScroll(document.getElementById('brand'));*/
+  const $body = document.querySelector('body');
+  $body.style.removeProperty('overflow');
 }
 
   /*Media Query style change for markerWrappers*/
