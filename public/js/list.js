@@ -90,15 +90,15 @@ function mobileClose(idx){
 }
 
   /*Media Query style change for markerWrappers*/
-  // let x = window.matchMedia("(orientation: landscape)");
-  // x.addListener(fullsc); // Attach listener function on state changes
-  // function fullsc(x) {
-  //   if (x.matches) { // If media query matches
-  //     document.getElementById('markerWrapper' + index).style.minWidth = "100vw";
-  //   } else {
-  //     document.getElementById('markerWrapper' + index).style.removeProperty("min-width");
-  //   }
-  // }
+  let x = window.matchMedia("(orientation: landscape)");
+  x.addListener(fullsc); // Attach listener function on state changes
+  function fullsc(x) {
+    if (x.matches) { // If media query matches
+      document.getElementById('markerWrapper' + index).style.minWidth = "100vw";
+    } else {
+      document.getElementById('markerWrapper' + index).style.removeProperty("min-width");
+    }
+  }
 
 fetch('/landmarks')
   .then(response => response.json())
@@ -108,7 +108,8 @@ fetch('/landmarks')
     markers = locs.map((loc,idx) => {
       let marker = document.createElement("div");
       marker.id = "markerWrapper" + idx;
-      marker.innerHTML = windowContent(idx);
+      // marker.innerHTML = windowContent(idx);
+      marker.innerHTML = "<div></div>";
       document.getElementById("listView").appendChild(marker);
     })
     return markers
