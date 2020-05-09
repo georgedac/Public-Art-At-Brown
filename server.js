@@ -46,7 +46,7 @@ passport.use(new LocalStrategy(
             console.log("checks out");
             return done(null, {id: "1"});
         }
-        console.log("nah bad creds");
+        console.log("nah bad creds"); //lmao
         return done(null, false);
     }
   ));
@@ -87,6 +87,9 @@ app.delete('/landmarks/:id', dbHandler.deleteLandmark);
 // Create controller handlers to handle requests at each endpoint
 app.get('/list', function(req, res) {
     res.sendFile(path.join(__dirname + '/views/list.html'));
+});
+app.get('/about', function(req, res) {
+    res.sendFile(path.join(__dirname + '/views/about.html'));
 });
 app.post('/login', 
 passport.authenticate('local', { failureRedirect: '/' }),

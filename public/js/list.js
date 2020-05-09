@@ -17,6 +17,7 @@ let locs = [
 let infowindow = null;
 let markers = [];
 let searchString = "";
+let index = 0;
 // end global variables
 
 // Helper functions
@@ -75,7 +76,7 @@ function windowContent(idx, expand=false) {
   `;
   return `<div class="infowindow listItem ${expand?"mobile-pad":""}">
         <div class="hide-mobile">${carousel}</div>
-        ${(loc.files.length > 0)?(expand ? carousel: `<img class="w-100 show-mobile" alt="${loc.title}" src=${loc.files[0].url}>`):""}
+        ${(loc.files.length > 0)?(expand ? carousel: `<img class="w-100 show-mobile fullscreen" alt="${loc.title}" src=${loc.files[0].url}>`):""}
         <h1 class="title">${loc.title}</h1>
         <div>
           <p class="artist">Artist: ${loc.artists}</p>
@@ -93,7 +94,7 @@ function mobileExpand(idx){
   </nav>
   ${windowContent(idx, true)}
   `;
-  bodyScrollLock.enableBodyScroll(document.getElementById('listView'));
+  /*bodyScrollLock.enableBodyScroll(document.getElementById('brand'));*/
   document.getElementById('markerWrapper' + idx).innerHTML = content;
   document.getElementById('markerWrapper' + idx).style.background = "white";
   document.getElementById('markerWrapper' + idx).style.opacity = "1";
@@ -102,7 +103,9 @@ function mobileExpand(idx){
   document.getElementById('markerWrapper' + idx).style.top = "0";
   document.getElementById('markerWrapper' + idx).style.left = "0";
   document.getElementById('markerWrapper' + idx).style.zIndex= "2";
-  bodyScrollLock.disableBodyScroll(document.getElementById('markerWrapper' + idx));
+  /*bodyScrollLock.disableBodyScroll(document.getElementById('markerWrapper' + idx));*/
+  index = idx;
+  fullsc(x);
 }
   
 function mobileClose(idx){
@@ -110,9 +113,21 @@ function mobileClose(idx){
   document.getElementById('markerWrapper' + idx).style.minHeight = "0";
   document.getElementById('markerWrapper' + idx).style.position = "relative"; 
   document.getElementById('markerWrapper' + idx).style.zIndex= "1";
-  bodyScrollLock.enableBodyScroll(document.getElementById('markerWrapper' + idx));
-  bodyScrollLock.disableBodyScroll(document.getElementById('listView'));
+  document.getElementById('markerWrapper' + idx).style.minWidth = "0";
+  /*bodyScrollLock.enableBodyScroll(document.getElementById('markerWrapper' + idx));
+  bodyScrollLock.disableBodyScroll(document.getElementById('brand'));*/
 }
+
+  /*Media Query style change for markerWrappers*/
+  let x = window.matchMedia("(orientation: landscape)");
+  x.addListener(fullsc); // Attach listener function on state changes
+  function fullsc(x) {
+    if (x.matches) { // If media query matches
+      document.getElementById('markerWrapper' + index).style.minWidth = "100vw";
+    } else {
+      document.getElementById('markerWrapper' + index).style.removeProperty("min-width");
+    }
+  }
 
 fetch('/landmarks')
   .then(response => response.json())
@@ -128,4 +143,4 @@ fetch('/landmarks')
     return markers
 });
 
-bodyScrollLock.disableBodyScroll(document.getElementById('listView'));
+/*bodyScrollLock.disableBodyScroll(document.getElementById('brand'));*/
