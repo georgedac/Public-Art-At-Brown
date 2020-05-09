@@ -1,19 +1,24 @@
 # Public-Art-At-Brown
-A website to display all public art at Brown University.
+Hello! This is a website to display all public art at Brown University.
+
+## Running the project
+Getting the project to run locally should be simple: navigate to the folder on the node.js cli, 
+then run "npm install" to install all node-modules. After that, run "npm run start" for the website to
+begin running on port 8080.
+
+The project is also deployed on heroku at public-art-at-brown.herokuapp.com
 
 ## Database structure
-CREATE TABLE IF NOT EXISTS landmark (
-    id INTEGER PRIMARY KEY AUTOINCREMENT,
-    title TEXT,
-    artists TEXT,
-    yearsCreated TEXT,
-    yearsInstalled TEXT,
-    lat FLOAT(10,6),
-    long FLOAT(10,6)
-)
+let locs: {
+    title: string;
+    artist: string;
+    description: string;
+    location: {
+        lat: number;
+        lng: number;
+    };
+    files: string[];
+}[]
 
-CREATE TABLE IF NOT EXISTS images (
-    landmarkId INTEGER
-    FOREIGN KEY (landmarkId) REFERENCES landmark(id) ON DELETE CASCADE
-    url TEXT
-)
+## Authors
+Katie Scholl '19 M'20, George Daccache '21

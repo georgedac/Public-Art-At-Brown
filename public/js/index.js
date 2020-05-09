@@ -214,12 +214,6 @@ function initMap() {
   });
   currentloc.setVisible(false);
 
-/* THIS IS JUST TO SHOW BOTH TYPES OF MARKERS I MADE, DELETE LATER*/
-  new google.maps.Marker({
-    position: providence, 
-    icon: 'images/marker2.png',
-    map: map});
-
   // If user's location is close to campus, center on that
   if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition(function(position) {
