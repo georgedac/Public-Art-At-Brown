@@ -1,0 +1,501 @@
+/*COLOR GUIDE
+#98A4AE  Grey
+#C6CDD2  Grey with 55% tint (lighter)
+#4E3629  Brown
+#ED1C24  Red
+#C00404  Darker Red
+#FFC72C  Gold
+*/
+
+body {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    font-family: 'Lato', sans-serif;
+    color: #000000;
+    font-size: min(max(14px, 4vw), 16px);
+}
+
+div {
+    margin: 0;
+}
+
+h1 {
+    font-family: 'Alatsi', 'Lato', 'Times New Roman';
+    font-size: 32px;
+    text-align: center;
+    padding: 10px;
+    font-weight: 500;
+}
+
+h2 {
+    font-family: 'Alatsi', 'Lato', 'Times New Roman';
+    font-size: 26px;
+    padding: 10px;
+    font-weight: 500;    
+    margin-left: 70px;
+}
+
+#sidebar {
+    padding: 10px 0 0 0;
+    min-width: 230px;
+    min-height: 100vh;
+    box-sizing: border-box;
+    background-color: #4E3629;
+    color: #EFEFEF;
+    box-shadow: 3px 0 12px #C6CDD2;
+    position: relative;
+    z-index: 1;
+}
+
+#sidebar a:not(.active) {
+    text-decoration: none;
+    color: #000000;
+}
+
+#sidebar img {
+    width: 200px;
+    position: fixed;
+    bottom: 0;
+    margin-left: 10px;
+}
+
+#main {
+    flex: 1;
+}
+
+#map {
+    width: 100%;
+    height: 100vh;
+}
+
+#menu {
+    margin: 50px 0 30px 5%;
+    padding: 0;
+    list-style-type: none;
+    text-align: center;
+}
+
+#menu li {
+    padding: 5px 0;
+    font-size: min(max(16px, 4vw), 18px);
+    background-color: #EFEFEF;
+    border-left: 4px solid #EFEFEF;
+}
+
+#menu li:hover {
+    text-decoration: none;
+    border-left: 4px solid #C00404;
+}
+
+#menu li.active {
+    border-left: 4px solid #C00404;
+
+}
+
+#menu a {
+    display: block;
+    margin: 10px 0;
+}
+
+/* This is for the signin form */
+#signinForm {
+    width: 94%;
+    margin-right: 6%;
+    padding: 15px 15px 5px 15px;
+    background-color: #EFEFEF;
+    color: #000000;
+    position: relative;
+    left: -300px;
+    border-right: 4px solid #C00404;
+    z-index: 4;
+    transition: left 0.7s ease;
+}
+
+#signinForm input, label {
+    padding: 0;
+    margin: 0;
+}
+
+#signinForm button {
+    background-color: #4E3629;
+    color: #EFEFEF;
+}
+
+
+/* These next three are for the search bars*/
+
+#mainSearch {
+    width: 45vw;
+    height: 38px;
+    margin: 0;
+    padding: 0 0 0 20px;
+    border-top-left-radius: 500px;
+    border-bottom-left-radius: 500px;
+    border: 2px solid #ED1C24;
+}
+
+.searchWrapper img {
+    width: 38px;
+    height: 38px;
+    position: absolute;
+    right: 0;
+    z-index: 5;
+    padding: 5px 5px;
+    border: 2px solid #ED1C24;
+    display: block;
+    margin-top: -38px;
+}
+
+.searchWrapper {
+    margin: 10px 0 0 230px;
+    z-index: 100;
+    position: absolute;
+    top: 0;
+}
+
+/*These are for the about page styling*/
+.leftParagraph {
+    margin: 0 40vw 40px 70px;
+    font-size: 20px;
+    text-align: justify;
+}
+
+.rightParagraph {
+    margin: 0 70px 40px 40vw;
+    font-size: 20px;
+    text-align: justify;
+}
+
+.leftImg {
+    float: left;
+    margin: 0 0 0 10vw;
+    border: 2px solid #4E3629;
+    max-height: 300px;
+}
+
+.rightImg {
+    float: right;
+    margin: 0 10vw 0 0;
+    border: 2px solid #4E3629;
+    max-height: 350px;
+}
+
+@media only screen and (max-width: 1100px) {
+    body {
+        /* here's where the difference is. so much pain in these lines */
+        /* position: fixed;  */
+        width: 100%;
+        height: 100%;
+        margin: 0px;
+        padding: 0px;
+        /* overflow-x: hidden;  */
+    }
+
+    .rightImg {
+        float: none;
+        position: relative;
+        margin: auto;
+    }
+    .leftImg {
+        float: none;
+        position: relative;
+        margin: auto;
+    }
+    .leftParagraph {
+        margin: 20px;
+        font-size: 20px;
+        text-align: center;
+    }
+    
+    .rightParagraph {
+        margin: 20px;
+        font-size: 20px;
+        text-align: center;
+    }
+}
+
+.bigTitle {
+    font-size: 40px;
+}
+
+/*These are to style the scrollbars*/
+#carousel::-webkit-scrollbar {
+    height: 8px;
+    width: 8px;
+}
+
+#carousel::-webkit-scrollbar-track {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.3); 
+    box-shadow: inset 0 0 2px rgba(0,0,0,0.3); 
+    border-radius: 0px;
+}
+
+#carousel::-webkit-scrollbar-thumb {
+    -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    box-shadow: inset 0 0 6px rgba(0,0,0,0.5); 
+    background-color: #98A4AE;
+}
+
+/*These are for the carousel*/
+
+#carousel{
+    background-color: white;
+    width: 100%;
+    max-height: 200px;
+    overflow-x: scroll;
+    overflow-y: auto;
+    flex-wrap: nowrap;
+    display: flex;
+    flex-direction: row;
+}
+
+.size-img {
+    height: 100%;
+    max-height: 200px;
+}
+
+.carousel-item-custom{
+    flex: 0 0 auto;
+    height: 200px;
+    width: 70%;
+    /* display:flex;
+    flex-direction: column;
+    align-items: center; */
+}
+
+.carousel-item-single-custom {
+    display: contents;
+}
+
+.carousel-item-custom img {
+    flex: 0 0 auto;
+    height: 100%;
+    width: 100%;
+    object-fit: cover;
+}
+
+.carousel-item-single-custom img {
+    flex: 0 0 auto;
+    height: 200px;
+    object-fit: cover;
+}
+
+#locWindow {
+    overflow: auto;
+}
+
+/*These next classes are specific to the grid view*/
+#listView {
+    display: grid;
+    grid-template-columns: repeat( auto-fit, minmax(250px, 1fr) );
+    justify-content: space-evenly;
+    margin-top: 70px;
+    grid-gap: 10px;
+    padding: 0 20px;
+    overflow: auto;
+}
+
+.listItem img {
+    width: 100%;
+    height: 200px;
+    object-fit: cover;
+}
+
+#infowindow {
+    display: none;
+}
+
+.show-mobile {
+    display: none;
+}
+
+.filterBox {
+    border-width: 0;
+    grid-column: 1/-1;
+    display: flex;
+    justify-content: space-around;
+    align-items: baseline;
+    padding: 0;
+}
+
+.filterButton {
+    border-width: 0;
+    padding: 10px 20px;
+    border-radius: 5px;
+}
+
+.skip-link {
+    position: absolute;
+    top: 0;
+    left: 20px;
+    width: 180px;
+    z-index: -1;
+    padding: 5px;
+    background-color: #C6CDD2;
+    font-size: 18px;
+    text-decoration: none;
+    color: #000000;
+    text-align: center;
+}
+
+.skip-link:focus {
+    z-index: 3;
+}
+
+/*These next few are for the styling of the list view text boxes*/
+.author {
+    font-weight: bold;
+}
+
+.title {
+    font-style: italic;
+}
+
+.years::after {
+    content: "\A\A";
+    white-space: pre;
+}
+
+.fix-top{
+    position: absolute;
+    top: 0;
+    z-index: 100;
+}
+
+@media only screen and (max-width: 824px) {
+
+    /* change searchbar, sidebar, admin popup */
+
+    .square-img{
+        height: 100%;
+        max-height: 200px;
+        max-width: 200px;
+    }
+
+    .show-mobile {
+        display: flex;
+    }
+    .hide-mobile {
+        display: none;
+    }
+
+    .mobile-pad{
+        padding: 10vw;
+    }
+    
+    #mobile-close{
+        -webkit-appearance: none;
+        -moz-appearance: none;
+    }
+
+    #brand {
+        align-self: center;
+        font-weight: bold;
+        font-family: 'Lato', sans-serif;
+    }
+
+    #main{
+        display: flex;
+        flex-direction: column;
+    }
+
+    #listView {
+        margin-top: 10px;
+    }
+    
+    #infowindow {
+        display: flex; /*???*/
+        flex-direction: column;
+        position: absolute;
+        width: 100%;
+        height: 0;
+        top: 0;
+        left: 0;
+        opacity: 0;
+    }
+    #mainSearch {
+        width: 100%;
+        height: 38px;
+        margin: 0;
+        padding: 0 0 0 15px;
+        border-top-left-radius: 500px;
+        border-bottom-left-radius: 500px;
+        border: 2px solid #C00404;
+    }
+
+    .searchWrapper img {
+        width: 38px;
+        height: 38px;
+        /*position: static;*/
+        z-index: auto;
+        padding: 5px 5px;
+        border: 2px solid #C00404;
+        /*display: block;
+        margin-top: -38px;*/
+    }
+    
+    .searchWrapper {
+        margin: 0 0 0 0;
+        z-index: auto;
+        position: relative;
+        margin-top: -24px;
+    }
+
+    #sidebar{
+        display: none;
+    }
+
+    #map {
+        height: calc(calc(100vh - 38px)  - 56px);
+    }
+
+    .rightImg {
+        float: none;
+        position: relative;
+        margin: auto;
+    }
+    .leftImg {
+        float: none;
+        position: relative;
+        margin: auto;
+    }
+    .leftParagraph {
+        margin: 20px;
+        font-size: 20px;
+        text-align: justify;
+    }
+    
+    .rightParagraph {
+        margin: 20px;
+        font-size: 20px;
+        text-align: justify;
+    }
+
+    /*Fullscreen images on landscape for mobile*/
+    @media (orientation: landscape) {
+        .infowindow img {
+            height: 100vh;
+            width: 100vw;
+        }
+
+        .mobile-pad {
+            padding: 0;
+        }
+
+        h1, p {
+            display: none;
+        }
+        
+        .leftParagraph, .rightParagraph {
+            display: initial;
+        }
+
+        #carousel {
+            min-height: 100vh;
+            min-width: 100vw;
+        }
+
+      }
+  }
+
