@@ -100,18 +100,18 @@ function mobileClose(idx){
     }
   }
 
-fetch('/landmarks')
-  .then(response => response.json())
-  .then(data => {
-    console.log(data)
-    locs = data;
-    markers = locs.map((loc,idx) => {
-      let marker = document.createElement("div");
-      marker.id = "markerWrapper" + idx;
-      marker.innerHTML = windowContent(idx);
-      document.getElementById("listView").appendChild(marker);
-    })
-    return markers
-});
+// fetch('/landmarks')
+//   .then(response => response.json())
+//   .then(data => {
+//     console.log(data)
+//     locs = data;
+//     markers = locs.map((loc,idx) => {
+//       let marker = document.createElement("div");
+//       marker.id = "markerWrapper" + idx;
+//       marker.innerHTML = windowContent(idx);
+//       document.getElementById("listView").appendChild(marker);
+//     })
+//     return markers
+// });
 
 /*bodyScrollLock.disableBodyScroll(document.getElementById('brand'));*/
