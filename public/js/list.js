@@ -108,8 +108,7 @@ fetch('/landmarks')
     markers = locs.map((loc,idx) => {
       let marker = document.createElement("div");
       marker.id = "markerWrapper" + idx;
-      // marker.innerHTML = windowContent(idx);
-      marker.innerHTML = "<div></div>";
+      marker.innerHTML = windowContent(idx);
       document.getElementById("listView").appendChild(marker);
     })
     return markers
